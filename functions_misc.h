@@ -9,7 +9,7 @@ void printImage(string name) {
     obraz.open(name);
     if (obraz.is_open()) {
         while (!obraz.eof()) {
-            
+
             getline(obraz, tab[i]);
             cout << tab[i] << endl;
             i++;
@@ -18,8 +18,14 @@ void printImage(string name) {
         obraz.close();
     }
     else {
-        cout << "Bˆ¥d wczytywania pliku/obraz u"  <<endl;
+        cout << "Bˆ¥d wczytywania pliku/obrazu" <<endl;
     }
+}
+
+void showInfos() {
+    cout << __cplusplus << endl;
+    cout << "Press Enter" << endl;
+    cin.get();
 }
 
 HANDLE getHandle() {

@@ -13,6 +13,7 @@ int main(){
     SetConsoleTitleA("Projekt w fazie test¢w 3!");
 
     //goFullscreen();
+    showInfos();
     setColorsTable();
     hideScrollbars();
     hideCursor();
@@ -41,7 +42,6 @@ int main(){
         clear();
         cout<<"Witaj w Invers World!\n";
         cout<<"czyli przygodowej zagadce\n\n";
-        //cout<<__cplusplus<<endl;
         coutMenu(start, 2, selected);
 
         startHandling(&selected, &fmenu, &fstart);

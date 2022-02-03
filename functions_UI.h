@@ -41,7 +41,7 @@ void showCursor() {
     SetConsoleCursorInfo(consoleHandle, &info);
 }
 
-void maximize(){
+void maximize() {
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
 }
 
@@ -71,7 +71,7 @@ void hideScrollbars() {
 
 }
 
-void blockScrollbars(){
+void blockScrollbars() {
     ShowScrollBar(GetConsoleWindow(), SB_BOTH, FALSE);
 }
 
@@ -101,7 +101,7 @@ void clearLines(int lin) {
             setCursorPosition(bufSize - 1, yy);
         }
     }
-    while (getCursorPosition().X > 0){
+    while (getCursorPosition().X > 0) {
         cout << "\b \b";
     }
     cout << "\b \b";
@@ -109,6 +109,7 @@ void clearLines(int lin) {
 
 void clear() {
     system("cls");
+    Sleep(100);
 }
 
 void coutMenu(string tab[], int n, int which_one) {
@@ -218,7 +219,7 @@ void startHandling(int* selected, bool* fmenu, bool* fstart) {
 }
 
 //void clearScreenBuff() {
-void clear2(){
+void clear2() {
 
     CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -238,7 +239,7 @@ void clear2(){
     FillConsoleOutputCharacter(hConsole, ' ', ScreenTotal, Position, &Written);
 }
 
-void spacjeDo(int linia){
+void spacjeDo(int linia) {
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO SBInfo;
@@ -281,46 +282,40 @@ void clearScreenSpace() {
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-bool setWindowSize(short columns, short rows)
-{
-    if (columns <= 0 || rows <= 0)
-    {
-        cout<<"ERR <0"<<endl;
+bool setWindowSize(short columns, short rows) {
+    if (columns <= 0 || rows <= 0) {
+        cout << "ERR <0" << endl;
         return false;
     }
- 
+
     CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
-    if (!GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo))
-    {
-        cout<<"ERR csbi"<<endl;
+    if (!GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo)) {
+        cout << "ERR csbi" << endl;
         return false;
     }
- 
+
     SMALL_RECT newRect;
-    newRect.Top    = consoleScreenBufferInfo.srWindow.Top;
-    newRect.Left   = consoleScreenBufferInfo.srWindow.Left;
+    newRect.Top = consoleScreenBufferInfo.srWindow.Top;
+    newRect.Left = consoleScreenBufferInfo.srWindow.Left;
     newRect.Bottom = rows;
-    newRect.Right  = columns;
-    
-    if (!SetConsoleWindowInfo(getHandle(), true, &newRect))
-    {
-        cout<<"ERR scwi"<<endl;
+    newRect.Right = columns;
+
+    if (!SetConsoleWindowInfo(getHandle(), true, &newRect)) {
+        cout << "ERR scwi" << endl;
         return false;
     }
- 
+
     return true;
 }
 
-void cls(HANDLE hConsole)
-{
+void cls(HANDLE hConsole) {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     SMALL_RECT scrollRect;
     COORD scrollTarget;
     CHAR_INFO fill;
 
     // Get the number of character cells in the current buffer.
-    if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
-    {
+    if (!GetConsoleScreenBufferInfo(hConsole, &csbi)) {
         return;
     }
 
