@@ -1,11 +1,31 @@
 #pragma once
 
-HANDLE getHandle()
-{
+void printImage(string name) {
+
+    fstream obraz;
+    string tab[100]{};
+    int i{};
+
+    obraz.open(name);
+    if (obraz.is_open()) {
+        while (!obraz.eof()) {
+            
+            getline(obraz, tab[i]);
+            cout << tab[i] << endl;
+            i++;
+
+        }
+        obraz.close();
+    }
+    else {
+        cout << "Bˆ¥d wczytywania pliku/obraz u"  <<endl;
+    }
+}
+
+HANDLE getHandle() {
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (consoleHandle == INVALID_HANDLE_VALUE)
-    {
-        cout<<"CONSOLE HANDLE ERROR"<<endl;
+    if (consoleHandle == INVALID_HANDLE_VALUE) {
+        cout << "CONSOLE HANDLE ERROR" << endl;
     }
     return consoleHandle;
 }
@@ -13,7 +33,7 @@ HANDLE getHandle()
 void setCursorPosition(int x, int y) {
     static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     std::cout.flush();
-    COORD coord = { (SHORT)x, (SHORT)y };
+    COORD coord = {(SHORT)x, (SHORT)y};
     SetConsoleCursorPosition(hOut, coord);
 }
 
@@ -25,7 +45,7 @@ COORD getCursorPosition() {
     }
     else {
         // The function failed. Call GetLastError() for details.
-        COORD cordy = { 0, 0 };
+        COORD cordy = {0, 0};
         return cordy;
     }
 }
@@ -54,7 +74,8 @@ void writeFromKeys(string txt) {
 
     const int n = txt.length();
 
-    INPUT in[n] = {};
+    //INPUT in[n] = {};
+    INPUT* in = new INPUT[n];
     ZeroMemory(in, sizeof(in));
 
     for (int i = 0; i < n; i++) {
@@ -74,27 +95,7 @@ void writeFromKeys(string txt) {
         //cout<<"Done!"<<endl;
     }
 
-}
-
-void printImage(string name) {
-
-    fstream obraz;
-    string tab[100]{};
-    int i{};
-
-    obraz.open(name);
-    if(obraz.is_open()){
-        while (!obraz.eof()) {
-            getline(obraz, tab[i]);
-            cout << tab[i] << endl;
-            i++;
-        }
-        obraz.close();
-    }
-    else{
-        cout<<"Bˆ¥d wczytywania pliku/obrazu"<<endl;
-    }
-
+    delete[] in;
 }
 
 void setColorsTable() {

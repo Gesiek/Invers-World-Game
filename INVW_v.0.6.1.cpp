@@ -6,7 +6,6 @@ using namespace std;
 #include "functions_game.h"
 #include "functions_UI.h"
 
-
 int main(){
 
     //SetConsoleTitle(L"Projekt w fazie test¢w 1!");

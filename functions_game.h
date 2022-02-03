@@ -1,7 +1,7 @@
 #pragma once
 
 string szyfrPoj(string txt) {
-
+    
     int k = txt.length() % 26;
     string w = "";
     int tmp;
