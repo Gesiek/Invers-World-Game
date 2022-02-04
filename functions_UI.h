@@ -1,12 +1,14 @@
 #pragma once
 
+void letsCenter(string txt){
+    
+}
+
 /*f1 - cls przed, f2 - cls po */
 void loadingScreen(int s = 10, bool f1 = 0, bool f2 = 0) {
 
-    CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    GetConsoleScreenBufferInfo(hConsole, &screenBufferInfo);
-    int bufSize = screenBufferInfo.dwSize.X;
+    GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo);
+    int bufSize = consoleScreenBufferInfo.dwSize.X;
 
     char chars[] = {'-', '\\', '|', '/'};
     unsigned int i;
@@ -26,19 +28,20 @@ void loadingScreen(int s = 10, bool f1 = 0, bool f2 = 0) {
 
 /* ukryj migajacy kursor*/
 void hideCursor() {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO info;
-    info.dwSize = 100;
-    info.bVisible = FALSE;
-    SetConsoleCursorInfo(consoleHandle, &info);
+    //HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    //CONSOLE_CURSOR_INFO info;
+    consoleCursorInfo.dwSize = 100;
+    consoleCursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(getHandle(), &consoleCursorInfo);
 }
 
+/* poka¾ migajacy kursor*/
 void showCursor() {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO info;
-    info.dwSize = 100;
-    info.bVisible = TRUE;
-    SetConsoleCursorInfo(consoleHandle, &info);
+    //HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    //CONSOLE_CURSOR_INFO info;
+    consoleCursorInfo.dwSize = 100;
+    consoleCursorInfo.bVisible = TRUE;
+    SetConsoleCursorInfo(getHandle(), &consoleCursorInfo);
 }
 
 void maximize() {
@@ -53,10 +56,10 @@ void goFullscreen() {
 
 void hideScrollbars() {
 
-    CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
+    //CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
     // Get console handle and get screen buffer information from that handle.
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    GetConsoleScreenBufferInfo(hConsole, &screenBufferInfo);
+    //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo);
     // Get rid of the scrollbar by setting the screen buffer size the same as 
     // the console window size.
     COORD new_screen_buffer_size;
@@ -64,10 +67,10 @@ void hideScrollbars() {
     // of the visible console in character cells.
     // That visible portion is what we want to set the screen buffer to, so that 
     // no scroll bars are needed to view the entire buffer.
-    new_screen_buffer_size.X = screenBufferInfo.srWindow.Right - screenBufferInfo.srWindow.Left + 1; // Columns
-    new_screen_buffer_size.Y = screenBufferInfo.srWindow.Bottom - screenBufferInfo.srWindow.Top + 1; // Rows
+    new_screen_buffer_size.X = consoleScreenBufferInfo.srWindow.Right - consoleScreenBufferInfo.srWindow.Left + 1; // Columns
+    new_screen_buffer_size.Y = consoleScreenBufferInfo.srWindow.Bottom - consoleScreenBufferInfo.srWindow.Top + 1; // Rows
     // Set new buffer size
-    SetConsoleScreenBufferSize(hConsole, new_screen_buffer_size);
+    SetConsoleScreenBufferSize(getHandle(), new_screen_buffer_size);
 
 }
 
@@ -75,16 +78,18 @@ void blockScrollbars() {
     ShowScrollBar(GetConsoleWindow(), SB_BOTH, FALSE);
 }
 
-/*backspace od bie¾¥cej lini do lini nr lin, */
+/*backspace od bie¾¥cej lini do lini nr lin*/
 void clearLines(int lin) {
 
-    CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    GetConsoleScreenBufferInfo(hConsole, &screenBufferInfo);
+    hideCursor();
+
+    //CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
+    //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo);
 
     short yy = lin;
     COORD cord = {0, yy};
-    int bufSize = screenBufferInfo.dwSize.X;
+    int bufSize = consoleScreenBufferInfo.dwSize.X;
 
     //cout<<bufSize<<endl;
     //cout<<screenBufferInfo.srWindow.Right<<endl;
@@ -105,11 +110,14 @@ void clearLines(int lin) {
         cout << "\b \b";
     }
     cout << "\b \b";
+
+    showCursor();
 }
 
 void clear() {
+    //Sleep(1);
+    this_thread::sleep_for(1ms);
     system("cls");
-    Sleep(100);
 }
 
 void coutMenu(string tab[], int n, int which_one) {
@@ -149,13 +157,35 @@ void coutMenuDesc(int access_level) {
     }
 }
 
-void coutEscInfo() {
+void coutEscExitInfo() {
 
-    cout << "\n\nWci˜nij \"ESC\", by zrobi† krok w tyˆ\n\n";
+    cout << "\n\nWci˜nij \"ESC\", by si© wycofa†\n\n";
+}
 
+void cout0ExitInfo() {
+    
+    //HANDLE hConsole = getHandle();
+    //CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
+    GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo);
+    int y = consoleScreenBufferInfo.srWindow.Bottom;
+    
+    setCursorPosition(0, y);
+
+    cout << "Wpisz \"0\", by si© wr¢ci†";
+}
+
+void exitByEsc(bool* flag1, bool* flag2) {
+
+    int key = getKey();
+
+    if (key == 27) {
+        *flag1 = false;
+        *flag2 = false;
+    }
 }
 
 int menuControl() {
+    //well..
     return 0;
 }
 
@@ -239,7 +269,7 @@ void clear2() {
     FillConsoleOutputCharacter(hConsole, ' ', ScreenTotal, Position, &Written);
 }
 
-void spacjeDo(int linia) {
+void spacjeDoTest3(int linia) {
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO SBInfo;
@@ -258,7 +288,7 @@ void spacjeDo(int linia) {
     FillConsoleOutputCharacter(hConsole, ' ', total, Position, &Written);
 }
 
-void clearScreenSpace() {
+void clearScreenSpace4() {
     HANDLE hStdOut;
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     DWORD count;
@@ -305,41 +335,43 @@ bool setWindowSize(short columns, short rows) {
         return false;
     }
 
+    //it not kurcze works
     return true;
 }
 
-void cls(HANDLE hConsole) {
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
+void cls() {
+    
+    //CONSOLE_SCREEN_BUFFER_INFO csbi;
     SMALL_RECT scrollRect;
     COORD scrollTarget;
     CHAR_INFO fill;
 
     // Get the number of character cells in the current buffer.
-    if (!GetConsoleScreenBufferInfo(hConsole, &csbi)) {
+    if (!GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo)) {
         return;
     }
 
     // Scroll the rectangle of the entire buffer.
     scrollRect.Left = 0;
     scrollRect.Top = 0;
-    scrollRect.Right = csbi.dwSize.X;
-    scrollRect.Bottom = csbi.dwSize.Y;
+    scrollRect.Right = consoleScreenBufferInfo.dwSize.X;
+    scrollRect.Bottom = consoleScreenBufferInfo.dwSize.Y;
 
     // Scroll it upwards off the top of the buffer with a magnitude of the entire height.
     scrollTarget.X = 0;
-    scrollTarget.Y = (SHORT)(0 - csbi.dwSize.Y);
+    scrollTarget.Y = (SHORT)(0 - consoleScreenBufferInfo.dwSize.Y);
 
     // Fill with empty spaces with the buffer's default text attribute.
     fill.Char.UnicodeChar = TEXT(' ');
-    fill.Attributes = csbi.wAttributes;
+    fill.Attributes = consoleScreenBufferInfo.wAttributes;
 
     // Do the scroll
-    ScrollConsoleScreenBuffer(hConsole, &scrollRect, NULL, scrollTarget, &fill);
+    ScrollConsoleScreenBuffer(getHandle(), &scrollRect, NULL, scrollTarget, &fill);
 
     // Move the cursor to the top left corner too.
-    csbi.dwCursorPosition.X = 0;
-    csbi.dwCursorPosition.Y = 0;
+    consoleScreenBufferInfo.dwCursorPosition.X = 0;
+    consoleScreenBufferInfo.dwCursorPosition.Y = 0;
 
-    SetConsoleCursorPosition(hConsole, csbi.dwCursorPosition);
+    SetConsoleCursorPosition(getHandle(), consoleScreenBufferInfo.dwCursorPosition);
 }
 
