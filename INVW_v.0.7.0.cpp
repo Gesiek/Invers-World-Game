@@ -2,9 +2,21 @@
 
 using namespace std;
 
+//colors set
+int cMenu = 1;
+int cText = 2;
+int cExit = 3;
+int cYes = 4;
+int cNo = 5;
+int cZiem = 6;
+int cTraw = 7;
+int cWoda = 8;
+
 #include "functions_misc.h"
 #include "functions_UI.h"
 #include "functions_game.h"
+
+int access_level{};
 
 int main() {
 
@@ -18,6 +30,7 @@ int main() {
     hideScrollbars();
     hideCursor();
 
+    setColor(cText);
     printImage("./img/intro.txt");
 
     loadingScreen(2);
@@ -29,20 +42,27 @@ int main() {
     bool flvl3 = false;
     bool flvl4 = false;
     bool ffinal = false;
-    int access_level = 1;
     int key{};
     int selected{};
     int enter{};
 
-    string start[2] = {"Rozpocznij gr©", "Wyjd« "};
+    string start[3] = {"Rozpocznij gr©", "Resetuj post©p", "Wyjd« "};
     string menu[5] = {"Dziwny pok¢j", "Drzwi", "Jezioro", "Plac Gˆ¢wny", "???"};
+
+    int width = consoleScreenBufferInfo.dwSize.X;
 
     while (fstart) {
 
         clear();
-        cout << "Witaj w Invers World!\n";
-        cout << "czyli przygodowej zagadce\n\n";
-        coutMenu(start, 2, selected);
+        cout<<"\n";
+        setColor(cMenu);
+        setCenter(21); cout << "Witaj w Invers World!"<<endl;
+        setCenter(26); cout << "czyli przygodowej zagadce\n"<<endl;
+        setCenter(40); cout << "Czy jeste˜ got¢w stawi† czoˆa wyzwaniom?\n"<<endl;
+
+        //wy˜wietlenie start menu
+        setColor(cText);
+        coutMenu(start, 3, selected);
 
         startHandling(&selected, &fmenu, &fstart);
 
@@ -70,15 +90,11 @@ int main() {
             }
             while (flvl2) {
                 clear();
-                cout << "f2" << endl;
-                Sleep(2000);
-                flvl2 = false;
+                level2(&flvl2, &selected);
             }
             while (flvl3) {
                 clear();
-                cout << "f3" << endl;
-                Sleep(2000);
-                flvl3 = false;
+                level3(&flvl3, &selected);
             }
             while (flvl4) {
                 clear();

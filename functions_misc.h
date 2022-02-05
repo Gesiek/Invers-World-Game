@@ -8,30 +8,6 @@ HANDLE getHandle() {
     return consoleHandle;
 }  
 
-int printImage(string name) {
-
-    fstream obraz;
-    string tab[100]{};
-    int j{};
-
-    obraz.open(name);
-    if (obraz.is_open()) {
-        while (!obraz.eof()) {
-
-            getline(obraz, tab[j]);
-            cout << tab[j] << endl;
-            j++;
-
-        }
-        obraz.close();
-    }
-    else {
-        cout << "Bˆ¥d wczytywania pliku/obrazu" << endl;
-    }
-
-    return j;
-}
-
 void showInfos() {
     cout << __cplusplus << endl;
     cout << "Press Enter" << endl;
@@ -105,7 +81,7 @@ void writeFromKeys(string txt) {
 
     delete[] in;
 }
-
+/*1menus, 2txt, 3exit, 4yes, 5nope, 6ziemia, 7trawa, 8woda*/
 void setColorsTable() {
 
     //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -114,16 +90,19 @@ void setColorsTable() {
     consoleScreenBufferInfoex.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
     GetConsoleScreenBufferInfoEx(getHandle(), &consoleScreenBufferInfoex);
 
-    //GREENs
-    consoleScreenBufferInfoex.ColorTable[1] = RGB(0, 128, 0);
-    consoleScreenBufferInfoex.ColorTable[2] = RGB(56, 176, 0);
-    consoleScreenBufferInfoex.ColorTable[3] = RGB(112, 224, 0);
-    consoleScreenBufferInfoex.ColorTable[4] = RGB(158, 240, 26);
-    consoleScreenBufferInfoex.ColorTable[5] = RGB(204, 255, 51);
+    consoleScreenBufferInfoex.ColorTable[1] = RGB(255, 255, 100); // 1 - menus desc
+    consoleScreenBufferInfoex.ColorTable[2] = RGB(255, 255, 255); // 2 - text
+    consoleScreenBufferInfoex.ColorTable[3] = RGB(255, 255, 50);  // 3 - exit info
+    consoleScreenBufferInfoex.ColorTable[4] = RGB(80, 255, 50);   // 4 - yes!
+    consoleScreenBufferInfoex.ColorTable[5] = RGB(255, 80, 50);   // 5 - nope!
+    consoleScreenBufferInfoex.ColorTable[6] = RGB(114, 93, 71);   // 6 - ziemia
+    consoleScreenBufferInfoex.ColorTable[7] = RGB(114, 156, 71);  // 7 - trawa
+    consoleScreenBufferInfoex.ColorTable[8] = RGB(114, 156, 225); // 8 - woda
+    //                                                                 - default text
 
     SetConsoleScreenBufferInfoEx(getHandle(), &consoleScreenBufferInfoex);
 }
-
+/*1menus, 2txt, 3exit, 4yes, 5nope, 6ziemia, 7trawa, 8woda*/
 void setColor(int k) {
     //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(getHandle(), k);
@@ -148,4 +127,66 @@ void setFont() {
     SetCurrentConsoleFontEx(getHandle(), FALSE, &consoleFontInfo);
 }
 
+/*czym wi©cej tym bardziej w lewo przesuni©te*/
+void setCenter(int length) {
 
+    GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo);
+    int width = consoleScreenBufferInfo.dwSize.X;
+    //cout<<"w:"<<width<<" l:"<<length<<endl;
+    setCursorPosition((width / 2) - (length / 2), getCursorPosition().Y);
+    //setCursorPosition(50, getCursorPosition().Y);
+}
+
+int printImage(string name) {
+
+    fstream obraz;
+    string tab[100]{};
+    int j{};
+
+    obraz.open(name);
+    if (obraz.is_open()) {
+        while (!obraz.eof()) {
+
+            getline(obraz, tab[j]);
+            setCenter(tab[j].length()); cout << tab[j] << endl;
+            j++;
+
+        }
+        obraz.close();
+    }
+    else {
+        cout << "Bˆ¥d wczytywania obrazu [printImage]" << endl;
+    }
+
+    return j;
+}
+
+/*centered*/
+void writeFromFile(string nazwa){
+    
+    ifstream plik;
+    plik.open(nazwa);
+    string str{};
+
+    if(plik.is_open()){
+
+        while(!plik.eof()){
+            getline(plik, str);
+            setCenter(str.length());
+            cout<<str<<endl;
+        }
+
+        plik.close();
+    }
+    else{
+        cout<<"Bˆ¥d przy otwaciu pliku!"<<endl;
+    }
+
+}
+
+void clearCinBuffer(){
+    cin.clear();
+    cin.sync();
+    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    //Sleep(1);
+}

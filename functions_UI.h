@@ -1,9 +1,5 @@
 #pragma once
 
-void letsCenter(string txt){
-    
-}
-
 /*f1 - cls przed, f2 - cls po */
 void loadingScreen(int s = 10, bool f1 = 0, bool f2 = 0) {
 
@@ -121,12 +117,14 @@ void clear() {
 }
 
 void coutMenu(string tab[], int n, int which_one) {
-
+    
     for (int i = 0; i < n; i++) {
         if (i == which_one) {
+            setCenter(tab[i].length());
             cout << tab[i] << " <-" << endl;
         }
         else {
+            setCenter(tab[i].length());
             cout << tab[i] << endl;
         }
     }
@@ -134,17 +132,21 @@ void coutMenu(string tab[], int n, int which_one) {
 }
 
 void coutMenuDesc(int access_level) {
+
+    setColor(cMenu);
+
     switch (access_level) {
+    case 0:
+        writeFromFile("./resources/access0");
+        break;
     case 1:
-        cout << "------------------------------------------------\n";
-        cout << "Trafiˆe˜ do loleoleelo leo eko oe ro ijriojior \njoij rjojreijii eru hy uuewiur ieui hiur ihu hriwr\n";
-        cout << "------------------------------------------------\n\n";
+        writeFromFile("./resources/access1");
         break;
     case 2:
-        cout << "Wiesz ju¾ jjihehr uih riuh irui hiueh ih ihri \nhiuerh iuh ieh iehri hieur hiueh iuhiu rhiwhriwhi" << endl;
+        writeFromFile("./resources/access2");
         break;
     case 3:
-        cout << "" << endl;
+        writeFromFile("./resources/access3");
         break;
     case 4:
         cout << "" << endl;
@@ -155,23 +157,61 @@ void coutMenuDesc(int access_level) {
     default:
         break;
     }
+    setColor(cText);
+
 }
 
 void coutEscExitInfo() {
 
-    cout << "\n\nWci˜nij \"ESC\", by si© wycofa†\n\n";
+    cout << "\n\n";
+    setColor(cExit);
+    setCenter(31);
+    cout << "Wci˜nij \"I\", by zobaczy† ekwipunek\n";
+    setCenter(26);
+    cout << "Wci˜nij \"ESC\", by si© wycofa†";
+    setColor(cText);
+}
+
+void coutAnyExitInfo() {
+
+    cout << "\n\n";
+    setColor(cExit);
+    setCenter(22);
+    cout << "Wci˜nij dowolny klawisz";
+    setColor(cText);
+}
+
+void coutIfRepeat(bool* flag) {
+
+    cout << "\n\n";
+    setColor(cExit);
+    setCenter(30);
+    cout << "Wci˜nij \"Enter\", by kontunuowa†\n";
+    setCenter(54);
+    cout << "Wci˜nij \"0\", by nie pokazywa† tego komunikatu ponownie";
+    setColor(cText);
+    
+    int key = getch();
+    if(key == 13){
+        //kontunuuj
+    }
+    else{
+        *flag = false;
+    }
 }
 
 void cout0ExitInfo() {
-    
+
     //HANDLE hConsole = getHandle();
     //CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
     GetConsoleScreenBufferInfo(getHandle(), &consoleScreenBufferInfo);
     int y = consoleScreenBufferInfo.srWindow.Bottom;
-    
-    setCursorPosition(0, y);
 
+    setColor(cExit);
+    setCursorPosition(0, y);
+    setCenter(27);
     cout << "Wpisz \"0\", by si© wr¢ci†";
+    setColor(cText);
 }
 
 void exitByEsc(bool* flag1, bool* flag2) {
@@ -182,6 +222,23 @@ void exitByEsc(bool* flag1, bool* flag2) {
         *flag1 = false;
         *flag2 = false;
     }
+}
+
+void showEq() {
+
+    while (1) {
+        
+        clear();
+        cout<<endl;
+        setCenter(8); showTime();
+        cout<<"\n\n\n";
+        writeFromFile("./resources/eqlist");
+        coutAnyExitInfo();
+
+        this_thread::sleep_for(250ms);
+        if(getKey()) break;
+    }
+
 }
 
 int menuControl() {
@@ -212,11 +269,27 @@ int menuHandling(int* selected, int first, int last, bool* fmenu) {
         (*selected) = 0;
         *fmenu = false;
         break;
+    case 105: //I
+        showEq();
+        break;
     default:
         break;
     }
 
     return 0;
+}
+
+void resetStats() {
+    
+    clear();
+    cout<<endl;
+    setCenter(22); cout<<"Ekwipunek wyczyszczony"<<endl;
+    this_thread::sleep_for(1s);
+
+    ofstream eq;
+    eq.open("./resources/eqlist", ios::trunc);
+    eq.close();
+
 }
 
 void startHandling(int* selected, bool* fmenu, bool* fstart) {
@@ -230,7 +303,7 @@ void startHandling(int* selected, bool* fmenu, bool* fstart) {
         }
         break;
     case 80: // w dol
-        if (*selected < 1) {
+        if (*selected < 2) {
             (*selected)++;
         }
         break;
@@ -239,6 +312,9 @@ void startHandling(int* selected, bool* fmenu, bool* fstart) {
             *fmenu = true;
         }
         if (*selected == 1) {
+            resetStats();
+        }
+        if (*selected == 2) {
             *fstart = false;
         }
         break;
@@ -269,6 +345,7 @@ void clear2() {
     FillConsoleOutputCharacter(hConsole, ' ', ScreenTotal, Position, &Written);
 }
 
+//jakie˜ tam inne czyszczenia ekranu/buffora
 void spacjeDoTest3(int linia) {
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -312,7 +389,7 @@ void clearScreenSpace4() {
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-bool setWindowSize(short columns, short rows) {
+bool setWindowSize(short columns, short rows) { //not works =(
     if (columns <= 0 || rows <= 0) {
         cout << "ERR <0" << endl;
         return false;
@@ -340,7 +417,7 @@ bool setWindowSize(short columns, short rows) {
 }
 
 void cls() {
-    
+
     //CONSOLE_SCREEN_BUFFER_INFO csbi;
     SMALL_RECT scrollRect;
     COORD scrollTarget;
