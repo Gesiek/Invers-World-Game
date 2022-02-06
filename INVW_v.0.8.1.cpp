@@ -98,9 +98,7 @@ int main() {
             }
             while (flvl4) {
                 clear();
-                cout << "f4" << endl;
-                Sleep(2000);
-                flvl4 = false;
+                level4(&flvl4, &selected);
             }
             while (ffinal) {
                 clear();

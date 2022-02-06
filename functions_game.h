@@ -116,7 +116,7 @@ int intInput(int inputLine, bool poziomX, int wod, int wdo) {
         setCursorPosition(0, inputLine);
 
         if (poziomX) {
-            cout << "Znajd« litere! " << endl;
+            cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. liczba? litera? " << endl;
             cout << "Wsp¢ˆrz©dna |pionowa|: ";
         }
         else {
@@ -215,9 +215,10 @@ void level1(bool* outflag, int* selected) {
 
     int enter{};
     string menuL1[3] = {"Sprawd« pierwszy", "Sprawd« drugi", "Sprawd« trzeci"};
+    static bool o1{}, o2{}, o3{};
 
     setColor(cMenu);
-    writeFromFile("./resources/lvl1");
+    writeFromFile("./resources/l1desc");
     setColor(cText);
     coutMenu(menuL1, 3, *selected);
     coutEscExitInfo();
@@ -227,33 +228,27 @@ void level1(bool* outflag, int* selected) {
         if (*selected == 0) {
             clear();
             if (showPicture("./img/pic1.txt", 10, 3, 11, 11)) {
-                fstream eq;
-                eq.open("./resources/eqlist", ios::app);
-                if (eq.is_open()) {
-                    eq << "Pierwszy obraz: B - (10, 3)" << endl;
-                    eq.close();
+                if (!o1) {
+                    o1 = true;
+                    printToEq("Pierwszy obraz: B - (10, 3)");
                 }
             }
         }
         if (*selected == 1) {
             clear();
             if (showPicture("./img/pic2.txt", 2, 4, 11, 9)) {
-                fstream eq;
-                eq.open("./resources/eqlist", ios::app);
-                if (eq.is_open()) {
-                    eq << "Drugi obraz: L - (2, 4)" << endl;
-                    eq.close();
+                if (!o2) {
+                    o2 = true;
+                    printToEq("Drugi obraz: L - (2, 4)");
                 }
             }
         }
         if (*selected == 2) {
             clear();
             if (showPicture("./img/pic3.txt", 10, 9, 13, 10)) {
-                fstream eq;
-                eq.open("./resources/eqlist", ios::app);
-                if (eq.is_open()) {
-                    eq << "Trzeci obraz: X - (10, 9)" << endl;
-                    eq.close();
+                if (!o3) {
+                    o3 = true;
+                    printToEq("Trzeci obraz: X - (10, 9)");
                 }
             }
         }
@@ -266,7 +261,9 @@ void level2(bool* outflag, int* selected) {
     int enter{};
     string menuL2[3] = {"Zapukaj", "Spr¢buj otworzy†", "U¾yj du¾o siˆy"};
 
-    writeFromFile("./resources/lvl2");
+    setColor(cMenu);
+    writeFromFile("./resources/l2desc");
+    setColor(cText);
     coutMenu(menuL2, 3, *selected);
     coutEscExitInfo();
     enter = menuHandling(selected, 0, 2, outflag);
@@ -373,12 +370,16 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
                 else {
                     cout << "X" << endl;
                     hideCursor();
-                    setColor(cNo);
+                    setColor(cWoda);
                     setCursorPosition(0, (linia + (length / 2)) - 1);
                     setCenter(6); cout << "*plum*" << endl;
                     setCenter(4); cout << "Ajh!" << endl;
-                    Sleep(1500);
+                    this_thread::sleep_for(1500ms);
                     setColor(cText);
+
+                    coutAnyExitInfo();
+                    pauze();
+
                     return false;
                 }
                 setColor(cText);
@@ -411,33 +412,69 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
         setColor(cYes);
         setCursorPosition(0, (linia + (length / 2)) - 1);
         setCenter(7); cout << "Dobrze!" << endl;
-        Sleep(1500);
+        this_thread::sleep_for(1500ms);
         setColor(cText);
         return true;
     }
     else {
         hideCursor();
-        Sleep(1500);
+        this_thread::sleep_for(1500ms);
         setColor(cText);
         return false;
     }
 }
 
 void coutBridgeHelp(bool* flag) {
-
+    setColor(cMenu);
     writeFromFile("./resources/3/bridgeHelp");
+    setColor(cText);
     coutIfRepeat(flag);
     clear();
 }
 
+void wyspa(bool* flag) {
+
+    int key{};
+
+    while (*flag) {
+        clear();
+
+        setColor(cMenu);
+        writeFromFile("./resources/3/wyspa");
+        setColor(cText);
+
+        setCenter(22);
+        cout << "Spr¢buj otworzy† skrzynk© <- "  <<endl;
+        coutEscExitInfo(false);
+
+        key = getch();
+
+        if (key == 13) {
+            clear();
+            writeFromFile("./resources/3/skrzynka");
+            coutAnyExitInfo();
+            system("pause >nul");
+        }
+        if (key == 27) {
+            *flag = false;
+        }
+
+    }
+
+}
+
+/*mosty, wyspa*/
 void level3(bool* outflag, int* selected) {
 
     int enter{};
     static int bridge_access = 1;
     static bool fHelp = true;
-    string menuL3[4] = {"Spr¢buj wybudowa† pierwszy most", "Spr¢buj wybudowa† drugi most", "Spr¢buj wybudowa† trzeci most","Sprawd« co znajduje si© na wyspie"};
+    bool fwyspa{};
+    string menuL3[4] = {"Spr¢buj wybudowa† pierwszy most", "Spr¢buj wybudowa† drugi most", "Spr¢buj wybudowa† trzeci most", "Sprawd« co znajduje si© na wyspie"};
 
-    writeFromFile("./resources/lvl3");
+    setColor(cMenu);
+    writeFromFile("./resources/l3desc");
+    setColor(cText);
     coutMenu(menuL3, bridge_access, *selected);
     coutEscExitInfo();
 
@@ -473,12 +510,134 @@ void level3(bool* outflag, int* selected) {
         }
         if (*selected == 3) {
             clear();
-            writeFromFile("./resources/3/wyspa");
-            coutAnyExitInfo();
-            getch();
+            fwyspa = true;
+            wyspa(&fwyspa);
         }
     }
 
 }
 
+void maszyna(bool* mflag) {
 
+    int linia{};
+    string txt{};
+
+    while (*mflag) {
+        clear();
+
+        writeFromFile("./resources/4/mdesc");
+        cout << "\n\n";
+        setCenter(36);
+        setColor(cMenu);
+        cout << "--------aktualnie w ekwipunku---------\n\n";
+        writeFromFile("./resources/eqlist");
+        setCenter(36);
+        cout << "--------------------------------------\n\n\n";
+        linia = getCursorPosition().Y;
+        setColor(cText);
+        cout0ExitInfo();
+
+        showCursor();
+
+        setCursorPosition(0, linia + 2);
+        setCenter(14);
+        cout << "Pisz tutaj: ";
+        getline(cin, txt);
+
+        hideCursor();
+
+        if (txt == "0") {
+            *mflag = false;
+            break;
+        }
+
+        cout << endl;
+        setCenter(txt.length());
+        cout << deszyfrLin(txt) << endl;
+
+        coutAnyExitInfo();
+        pauze();
+
+
+    }
+    hideCursor();
+}
+
+void biblioteka(bool* bflag) {
+
+    int enter{};
+    int sel{};
+    bool mflag{};
+
+    while (*bflag) {
+        clear();
+
+        string menuB[1] = {"Sprawd« maszyn©"};
+        setColor(cMenu);
+        writeFromFile("./resources/4/bdesc");
+        setColor(cText);
+        coutMenu(menuB, 1, sel);
+        coutEscExitInfo();
+
+        enter = menuHandling(&sel, 0, 0, bflag);
+
+        if (enter == 1) {
+            if (sel == 0) {
+                mflag = true;
+                maszyna(&mflag);
+            }
+        }
+    }
+
+}
+
+void level4(bool* outflag, int* selected) {
+
+    int enter{};
+    static int baccess = 1;
+    string menuL4[4] = {"Podejd« do fontanny", "Wejd« do sklepu", "Dopisz nazw© sklepu do listy w ekwipunku", "Wejd« do biblioteki"};
+    bool bflag{};
+
+    setColor(cMenu);
+    writeFromFile("./resources/l4desc");
+    setColor(cText);
+    coutMenu(menuL4, 4, *selected);
+    coutEscExitInfo();
+
+    enter = menuHandling(selected, 0, 3, outflag);
+
+    if (enter == 1) {
+        if (*selected == 0) {
+            clear();
+            setColor(cMenu);
+            writeFromFile("./resources/4/fontanna");
+            setColor(cText);
+            coutAnyExitInfo();
+            getch();
+        }
+        if (*selected == 1) {
+            clear();
+            writeFromFile("./resources/4/sklep");
+            setCenter(36);
+            cout << "Dlaczego tu wszystko kosztuje ";
+            setColor(cYes);
+            cout << "23,55";
+            setColor(cText);
+            cout << "?" << endl;
+            coutAnyExitInfo();
+            getch();
+        }
+        if (*selected == 2) {
+            clear();
+            cout << endl;
+            setCenter(9); cout << "Dopisuj©.." << endl;
+            printToEq("\"Eahgabsw j qlf\" - napis na szyldzie sklepu");
+            Sleep(1000);
+        }
+        if (*selected == 3) {
+            bflag = true;
+            biblioteka(&bflag);
+        }
+    }
+
+}

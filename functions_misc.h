@@ -6,7 +6,7 @@ HANDLE getHandle() {
         cout << "CONSOLE HANDLE ERROR" << endl;
     }
     return consoleHandle;
-}  
+}
 
 void showInfos() {
     cout << __cplusplus << endl;
@@ -81,6 +81,7 @@ void writeFromKeys(string txt) {
 
     delete[] in;
 }
+
 /*1menus, 2txt, 3exit, 4yes, 5nope, 6ziemia, 7trawa, 8woda*/
 void setColorsTable() {
 
@@ -102,6 +103,7 @@ void setColorsTable() {
 
     SetConsoleScreenBufferInfoEx(getHandle(), &consoleScreenBufferInfoex);
 }
+
 /*1menus, 2txt, 3exit, 4yes, 5nope, 6ziemia, 7trawa, 8woda*/
 void setColor(int k) {
     //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -162,31 +164,49 @@ int printImage(string name) {
 }
 
 /*centered*/
-void writeFromFile(string nazwa){
-    
+void writeFromFile(string nazwa) {
+
     ifstream plik;
     plik.open(nazwa);
     string str{};
 
-    if(plik.is_open()){
+    if (plik.is_open()) {
 
-        while(!plik.eof()){
+        while (!plik.eof()) {
             getline(plik, str);
             setCenter(str.length());
-            cout<<str<<endl;
+            cout << str << endl;
         }
 
         plik.close();
     }
-    else{
-        cout<<"Bˆ¥d przy otwaciu pliku!"<<endl;
+    else {
+        cout << "Bˆ¥d przy otwaciu pliku !" <<endl;
     }
 
 }
 
-void clearCinBuffer(){
-    cin.clear();
-    cin.sync();
+void clearCinBuffer() {
+
+    
+    //Sleep(100);
+    //cin.clear();
+    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    //fflush(stdin);
+    //HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    //DWORD originalMode;
+    //GetConsoleMode(hIn, &originalMode);
+    //DWORD mode = 0;
+    //SetConsoleMode(hIn, mode & ~ENABLE_ECHO_INPUT);
+    //Sleep(x);
+    //FlushConsoleInputBuffer(hIn);
+    //SetConsoleMode(hIn, originalMode);
+    //FlushConsoleInputBuffer(getHandle());
+    //cout<<unitbuf;
+    //cout<<flush;
+    //std::cout.flush();
+    //cin.clear();
+    //cin.sync();
     //cin.ignore(numeric_limits<streamsize>::max(), '\n');
     //Sleep(1);
 }

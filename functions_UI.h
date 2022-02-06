@@ -40,6 +40,10 @@ void showCursor() {
     SetConsoleCursorInfo(getHandle(), &consoleCursorInfo);
 }
 
+void pauze(){
+    system("pause > nul");
+}
+
 void maximize() {
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
 }
@@ -117,7 +121,7 @@ void clear() {
 }
 
 void coutMenu(string tab[], int n, int which_one) {
-    
+
     for (int i = 0; i < n; i++) {
         if (i == which_one) {
             setCenter(tab[i].length());
@@ -161,12 +165,14 @@ void coutMenuDesc(int access_level) {
 
 }
 
-void coutEscExitInfo() {
+void coutEscExitInfo(bool eq = true) {
 
     cout << "\n\n";
     setColor(cExit);
-    setCenter(31);
-    cout << "Wci˜nij \"I\", by zobaczy† ekwipunek\n";
+    if (eq) {
+        setCenter(31);
+        cout << "Wci˜nij \"I\", by zobaczy† ekwipunek\n";
+    }
     setCenter(26);
     cout << "Wci˜nij \"ESC\", by si© wycofa†";
     setColor(cText);
@@ -190,12 +196,12 @@ void coutIfRepeat(bool* flag) {
     setCenter(54);
     cout << "Wci˜nij \"0\", by nie pokazywa† tego komunikatu ponownie";
     setColor(cText);
-    
+
     int key = getch();
-    if(key == 13){
+    if (key == 13) {
         //kontunuuj
     }
-    else{
+    else {
         *flag = false;
     }
 }
@@ -209,8 +215,8 @@ void cout0ExitInfo() {
 
     setColor(cExit);
     setCursorPosition(0, y);
-    setCenter(27);
-    cout << "Wpisz \"0\", by si© wr¢ci†";
+    setCenter(18);
+    cout << "Wpisz \"0\", by wr¢ci†";
     setColor(cText);
 }
 
@@ -227,18 +233,27 @@ void exitByEsc(bool* flag1, bool* flag2) {
 void showEq() {
 
     while (1) {
-        
+
         clear();
-        cout<<endl;
+        cout << endl;
         setCenter(8); showTime();
-        cout<<"\n\n\n";
+        cout << "\n\n\n";
         writeFromFile("./resources/eqlist");
         coutAnyExitInfo();
 
         this_thread::sleep_for(250ms);
-        if(getKey()) break;
+        if (getKey()) break;
     }
 
+}
+
+void printToEq(string txt) {
+    fstream eq;
+    eq.open("./resources/eqlist", ios::app);
+    if (eq.is_open()) {
+        eq << txt << endl;
+        eq.close();
+    }
 }
 
 int menuControl() {
@@ -279,11 +294,32 @@ int menuHandling(int* selected, int first, int last, bool* fmenu) {
     return 0;
 }
 
+int quickMenuHandling(bool* fmenu) {
+
+    int key = getKey();
+
+    switch (key) {
+    case 13: // enter
+        return 1;
+        break;
+    case 27: // esc
+        *fmenu = false;
+        break;
+    case 105: //I
+        showEq();
+        break;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
 void resetStats() {
-    
+
     clear();
-    cout<<endl;
-    setCenter(22); cout<<"Ekwipunek wyczyszczony"<<endl;
+    cout << endl;
+    setCenter(22); cout << "Usuwam zawarto˜† z ekwipunku.." << endl;
     this_thread::sleep_for(1s);
 
     ofstream eq;

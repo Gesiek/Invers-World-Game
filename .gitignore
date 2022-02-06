@@ -1,4 +1,5 @@
 *.todo
+click*
 test.txt
 functiontesting.cpp
 functiontesting.exe
