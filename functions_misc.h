@@ -66,7 +66,7 @@ void writeFromKeys(string txt) {
 
         in[i].type = INPUT_KEYBOARD;
         in[i].ki.wVk = (int)txt[i];
-        //in[i].ki.dwFlags = KEYEVENTF_UNICODE;
+        in[i].ki.dwFlags = KEYEVENTF_UNICODE;
 
     }
 

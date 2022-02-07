@@ -22,7 +22,7 @@ int main() {
 
     //SetConsoleTitle(L"Projekt w fazie test¢w 1!");
     //SetConsoleTitleW(L"Projekt w fazie test¢w 2!");
-    SetConsoleTitleA("Projekt w fazie test¢w - level 1 done!");
+    SetConsoleTitleA("Projekt w fazie test¢w - dopinanie leveli!");
 
     goFullscreen();
     //showInfos();
@@ -34,6 +34,7 @@ int main() {
     printImage("./img/intro.txt");
 
     loadingScreen(2);
+
 
     bool fmenu = false;
     bool fstart = true;

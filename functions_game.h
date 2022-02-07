@@ -116,7 +116,7 @@ int intInput(int inputLine, bool poziomX, int wod, int wdo) {
         setCursorPosition(0, inputLine);
 
         if (poziomX) {
-            cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. liczba? litera? " << endl;
+            cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. jaka˜ liczba? litera? " << endl;
             cout << "Wsp¢ˆrz©dna |pionowa|: ";
         }
         else {
@@ -227,27 +227,27 @@ void level1(bool* outflag, int* selected) {
     if (enter == 1) {
         if (*selected == 0) {
             clear();
-            if (showPicture("./img/pic1.txt", 10, 3, 11, 11)) {
+            if (showPicture("./img/pic1.txt", 2, 4, 11, 9)) {
                 if (!o1) {
                     o1 = true;
-                    printToEq("Pierwszy obraz: B - (10, 3)");
+                    printToEq("Pierwszy obraz: L - (2, 4)");
                 }
             }
         }
         if (*selected == 1) {
             clear();
-            if (showPicture("./img/pic2.txt", 2, 4, 11, 9)) {
-                if (!o2) {
-                    o2 = true;
-                    printToEq("Drugi obraz: L - (2, 4)");
+            if (showPicture("./img/pic2.txt", 10, 3, 11, 11)) {
+                if (!o3) {
+                    o3 = true;
+                    printToEq("Drugi obraz: B - (10, 3)");
                 }
             }
         }
         if (*selected == 2) {
             clear();
             if (showPicture("./img/pic3.txt", 10, 9, 13, 10)) {
-                if (!o3) {
-                    o3 = true;
+                if (!o2) {
+                    o2 = true;
                     printToEq("Trzeci obraz: X - (10, 9)");
                 }
             }
@@ -435,6 +435,8 @@ void coutBridgeHelp(bool* flag) {
 void wyspa(bool* flag) {
 
     int key{};
+    static bool kartka{};
+    string napis = "tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk j p zynjsovxot uweje zs©dxk˜mso bntdwmirn";
 
     while (*flag) {
         clear();
@@ -443,8 +445,8 @@ void wyspa(bool* flag) {
         writeFromFile("./resources/3/wyspa");
         setColor(cText);
 
-        setCenter(22);
-        cout << "Spr¢buj otworzy† skrzynk© <- "  <<endl;
+        setCenter(30);
+        cout << "Spr¢buj otworzy† skrzynk© <-" << endl;
         coutEscExitInfo(false);
 
         key = getch();
@@ -452,8 +454,15 @@ void wyspa(bool* flag) {
         if (key == 13) {
             clear();
             writeFromFile("./resources/3/skrzynka");
+            setColor(cYes);
+            setCenter(108); cout<<napis<<"\n\n";
+            setColor(cText);
+            if(!kartka){
+                kartka=true;
+                printToEq("\nzaszyfrowana karteczka ze skrzynki na wyspie:\n*" + napis + "*\n");
+            }
             coutAnyExitInfo();
-            system("pause >nul");
+            pauze();
         }
         if (key == 27) {
             *flag = false;
@@ -540,7 +549,7 @@ void maszyna(bool* mflag) {
         showCursor();
 
         setCursorPosition(0, linia + 2);
-        setCenter(14);
+        setCenter(20);
         cout << "Pisz tutaj: ";
         getline(cin, txt);
 
@@ -591,6 +600,63 @@ void biblioteka(bool* bflag) {
 
 }
 
+void karteczka(){
+
+    static bool kot{};
+
+    if(!kot){
+        setColor(cText);
+        Sleep(1000);
+        setCenter(10); cout<<"Ale nagle..\n\n";
+        Sleep(1000);
+        setCenter(42); cout<<"Maˆy elf podaje Ci zwini©t¥ karteczk©..\n\n\n\n";
+        Sleep(1500);
+        setCenter(10); cout<<"Zobacz <-\n\n";
+
+        int key{};
+        int linia = getCursorPosition().Y;
+        coutEscExitInfo(false);
+
+        while(1){
+            key = getch();
+            if(key == 13) break;
+            if(key == 27) break;
+        }
+
+        if(key == 13){
+            system("start notepad.exe");
+            Sleep(100);
+            writeFromKeys("POD RUDYM KOT3M M4JA NAJLEP5ZA POTRAWKE Z DZ1KA");
+            //3451
+
+            kot=true;
+            Sleep(1000);
+            cout<<"\n\n";
+            setCursorPosition(0, linia + 2);
+            setColor(cYes);
+            setCenter(30); cout<<"*dopisuj© do listy w ekwipunku*\n";
+            setColor(cText);
+            printToEq("dziwna karteczka od elfa: \"pod rudym kot3m m4ja najlep5za potrawke z dz1ka\"");
+            
+            Sleep(1000);
+            coutAnyExitInfo();
+            getch();
+        }
+        else{
+            cout<<"\n\n";
+            setCenter(30); cout<<"Odwracasz si© i odchodzisz\n\n";
+            Sleep(1000);
+        }
+    }
+    else{
+        setCenter(17); cout<<"Cicho plumka woda\n";
+        setCenter(12); cout<<"Nic poza tym\n";
+        coutAnyExitInfo();
+        pauze();
+    }
+
+}
+
 void level4(bool* outflag, int* selected) {
 
     int enter{};
@@ -612,8 +678,7 @@ void level4(bool* outflag, int* selected) {
             setColor(cMenu);
             writeFromFile("./resources/4/fontanna");
             setColor(cText);
-            coutAnyExitInfo();
-            getch();
+            karteczka();
         }
         if (*selected == 1) {
             clear();

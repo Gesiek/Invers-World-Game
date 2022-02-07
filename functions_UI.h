@@ -170,10 +170,10 @@ void coutEscExitInfo(bool eq = true) {
     cout << "\n\n";
     setColor(cExit);
     if (eq) {
-        setCenter(31);
+        setCenter(33); //31
         cout << "Wci˜nij \"I\", by zobaczy† ekwipunek\n";
     }
-    setCenter(26);
+    setCenter(30); //26
     cout << "Wci˜nij \"ESC\", by si© wycofa†";
     setColor(cText);
 }
@@ -182,7 +182,7 @@ void coutAnyExitInfo() {
 
     cout << "\n\n";
     setColor(cExit);
-    setCenter(22);
+    setCenter(24);
     cout << "Wci˜nij dowolny klawisz";
     setColor(cText);
 }
