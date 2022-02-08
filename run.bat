@@ -1,0 +1,1 @@
+start /d "%CD%\Invers-World-Game\" INVW_v.0.8.7.exe

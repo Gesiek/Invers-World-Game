@@ -35,18 +35,19 @@ COORD getCursorPosition() {
 }
 
 int getKey() {
-    if (kbhit()) {
-        return getch();
+    if (_kbhit()) {
+        return _getch();
     }
     return 0;
 }
 
 void showTime() {
-    time_t czas = time(NULL);
-    struct tm* aTime = localtime(&czas);
-    int h = aTime->tm_hour;
-    int m = aTime->tm_min;
-    int s = aTime->tm_sec;
+    time_t czas = time(0);
+    struct tm ltime;
+    localtime_s(&ltime, &czas);
+    int h = ltime.tm_hour;
+    int m = ltime.tm_min;
+    int s = ltime.tm_sec;
     cout << (h < 10 ? "0" : "") << h;
     cout << ":";
     cout << (m < 10 ? "0" : "") << m;
@@ -184,6 +185,41 @@ void writeFromFile(string nazwa) {
         cout << "Bˆ¥d przy otwaciu pliku !" <<endl;
     }
 
+}
+
+void pauze(){
+    system("pause > nul");
+}
+
+void deb(){
+    cout<<"DEGUB"<<endl;
+    pauze();
+}
+
+_COORD calcMaxGoodWindow(){
+
+    int luka = 10;
+    int x = GetLargestConsoleWindowSize(getHandle()).X - 30;
+    int y = GetLargestConsoleWindowSize(getHandle()).Y - 5;
+
+    _COORD xy{};
+    xy.X = x;
+    xy.Y = y;
+
+    return xy;
+}
+
+_COORD calcMinGoodWindow(){
+
+    int luka = 5;
+    int x = GetLargestConsoleWindowSize(getHandle()).X - luka;
+    int y = GetLargestConsoleWindowSize(getHandle()).X - luka;
+
+    _COORD xy{};
+    xy.X = x;
+    xy.Y = y;
+
+    return xy;
 }
 
 void clearCinBuffer() {

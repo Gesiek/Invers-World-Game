@@ -16,24 +16,31 @@ int cWoda = 8;
 #include "functions_UI.h"
 #include "functions_game.h"
 
-int access_level{};
+int access_level = 4;
 
 int main() {
 
+    
     //SetConsoleTitle(L"Projekt w fazie test¢w 1!");
     //SetConsoleTitleW(L"Projekt w fazie test¢w 2!");
-    SetConsoleTitleA("Projekt w fazie test¢w - dopinanie leveli!");
+    SetConsoleTitleA("Projekt w fazie test¢w - lets resize!");
 
-    goFullscreen();
+    //ShowWindow(GetConsoleWindow(), SW_NORMAL);
+    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+    
+    fullScreen();
+    //goFullscreen();
+    
     //showInfos();
     setColorsTable();
-    hideScrollbars();
     hideCursor();
 
     setColor(cText);
     printImage("./img/intro.txt");
 
-    loadingScreen(2);
+    hideScrollbars();
+
+    loadingScreen(5);
 
 
     bool fmenu = false;
@@ -47,23 +54,28 @@ int main() {
     int selected{};
     int enter{};
 
-    string start[3] = {"Rozpocznij gr©", "Resetuj post©p", "Wyjd« "};
-    string menu[5] = {"Dziwny pok¢j", "Drzwi", "Jezioro", "Plac Gˆ¢wny", "???"};
+    string start[4] = { "Rozpocznij gr©", "Wyczy˜† ekwipunek", "Zmieä wieko˜† okna", "Wyjd«" };
+    string menu[5] = { "Dziwny pok¢j", "Drzwi", "Jezioro", "Plac Gˆ¢wny", "???" };
 
-    int width = consoleScreenBufferInfo.dwSize.X;
+    //int width = consoleScreenBufferInfo.dwSize.X;
+    
+    //fullScreen();
+    //fullScreen();
+    hideScrollbars();
+    hideCursor();
 
     while (fstart) {
 
         clear();
         cout<<"\n";
         setColor(cMenu);
-        setCenter(21); cout << "Witaj w Invers World!"<<endl;
-        setCenter(26); cout << "czyli przygodowej zagadce\n"<<endl;
-        setCenter(40); cout << "Czy jeste˜ got¢w stawi† czoˆa wyzwaniom?\n"<<endl;
+        setCenter(21); cout << "Witaj w Invers World!\n";
+        setCenter(26); cout << "czyli przygodowej zagadce\n\n";
+        setCenter(40); cout << "Czy jeste˜ got¢w stawi† czoˆa wyzwaniom?\n\n";
 
         //wy˜wietlenie start menu
         setColor(cText);
-        coutMenu(start, 3, selected);
+        coutMenu(start, 4, selected);
 
         startHandling(&selected, &fmenu, &fstart);
 
@@ -76,7 +88,7 @@ int main() {
 
             enter = menuHandling(&selected, 0, 4, &fmenu);
 
-            if (enter == 1) { //chcialem to na bool'u zrobic ale nie wiem dlaczego nie dziala, a na 0-1 dziala..
+            if (enter == 1) {
                 if (selected == 0) flvl1 = true;
                 if (selected == 1) flvl2 = true;
                 if (selected == 2) flvl3 = true;
@@ -85,27 +97,34 @@ int main() {
                 selected = 0;
             }
 
-            while (flvl1) {
-                clear();
+            if (flvl1) {
                 level1(&flvl1, &selected);
+                selected = 0;
             }
-            while (flvl2) {
-                clear();
+            if (flvl2) {
                 level2(&flvl2, &selected);
+                selected = 1;
             }
-            while (flvl3) {
-                clear();
+            if (flvl3) {
                 level3(&flvl3, &selected);
+                selected = 2;
             }
-            while (flvl4) {
-                clear();
+            if (flvl4) {
                 level4(&flvl4, &selected);
+                selected = 3;
             }
-            while (ffinal) {
-                clear();
-                cout << "f" << endl;
-                Sleep(2000);
-                ffinal = false;
+            if (ffinal) {
+                if(access_level == 4){
+                    final(&ffinal, &selected);
+                }
+                else{
+                    ffinal = false;
+                    clear();
+                    writeFromFile("./resources/fdesc");
+                    coutAnyExitInfo();
+                    pauze();
+                }
+                selected = 4;
             }
 
         }
