@@ -191,6 +191,10 @@ void pauze(){
     system("pause > nul");
 }
 
+void pause(){
+    system("pause");
+}
+
 void deb(){
     cout<<"DEGUB"<<endl;
     pauze();

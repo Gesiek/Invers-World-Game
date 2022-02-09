@@ -23,7 +23,7 @@ int main() {
     
     //SetConsoleTitle(L"Projekt w fazie test¢w 1!");
     //SetConsoleTitleW(L"Projekt w fazie test¢w 2!");
-    SetConsoleTitleA("Projekt w fazie test¢w - lets resize!");
+    SetConsoleTitleA("Projekt w fazie test¢w - last level!");
 
     //ShowWindow(GetConsoleWindow(), SW_NORMAL);
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);

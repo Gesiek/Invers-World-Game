@@ -275,22 +275,172 @@ bool checkTime(){
     //cout<<"M: "<<ltime->tm_min<<endl;
     //cout<<"S: "<<ltime->tm_sec<<endl;
 
-    if(((ltime.tm_min) % 3 == 0) && ((ltime.tm_sec) % 15 == 0)){
+    //if(((ltime.tm_min) % 3 == 0) && ((ltime.tm_sec) % 15 == 0)){
+        return true;
+    //}
+    //else{
+    //    return false;
+    //}
+}
+
+bool checkLetter(char l, int x, int y){
+
+    int xp{}, yp{};
+    string str = "- [";
+    str = str + l;
+    str = str + "]";
+
+    hideCursor();
+    setColor(cMenu);
+    setCenter(6); cout<<str<<endl;
+    setColor(cText);
+    showCursor();
+    setCenter(4); cout<<"x: "; cin>>xp;
+    setCenter(4); cout<<"y: "; cin>>yp;
+    hideCursor();
+
+    if((x == xp) && (y == yp)){
+        cout<<endl;
+        setColor(cYes); setCenter(7); cout<<"Dobrze"<<endl; setColor(cText);
         return true;
     }
     else{
+        cout<<endl;
+        setColor(cNo); setCenter(17); cout<<"Niet, niestety nie"<<endl; setColor(cText);
+        hideCursor();
         return false;
     }
 }
 
 void mysliwy(bool* flag){
 
+    int enter{};
+    int sel{};
+    static int know_level = 1;
+    string menuM[5] = {"Eee, co?", "1.", "2.", "3.", "4."};
+
+    clear();
+
+    writeFromFile("./resources/2/m");
+
+    Sleep(1500);
+    coutAnyExitInfo();
+    pauze();
+
+    if(know_level != 1){
+        sel = 1;
+    }
+
     while(*flag){
 
+        clear();
 
-        cout<<"M"<<endl;
-        Sleep(1000);
-        *flag = false;
+        setColor(cMenu);
+        switch (know_level) {
+            case 1:
+                writeFromFile("./resources/2/m0");
+                break;
+            case 2:
+                writeFromFile("./resources/2/m1");
+                break;
+            case 3:
+                writeFromFile("./resources/2/m1");
+                break;
+            case 4:
+                writeFromFile("./resources/2/m1");
+                break;
+            default:
+                break;
+        }
+        setColor(cText);
+
+        cout<<endl;
+
+        if(know_level == 1) {
+            coutMenu(menuM, know_level, sel);
+        }
+        else{
+            coutMenu(menuM, know_level, sel, 1);
+        }
+        
+        int linia = getCursorPosition().Y;
+        coutEscExitInfo(false);
+
+        if(know_level == 1) {
+            enter = menuHandling(&sel, 0, know_level-1, flag, false);
+        }
+        else{
+            enter = menuHandling(&sel, 1, know_level-1, flag, false);
+        }
+
+        if (enter == 1) {
+            if((sel != 0) && (know_level != 1)){
+                //wy˜wietlenie tu ekwipunku (dla pytaä)
+                cout << "\n\n";
+                setCenter(36);
+                setColor(cMenu);
+                cout << "--------aktualnie w ekwipunku---------\n\n";
+                writeFromFile("./resources/eqlist");
+                setCenter(36);
+                cout << "--------------------------------------\n\n";
+                setColor(cText);
+                clearLines(linia);
+            }
+            if (sel == 0) {
+                if(know_level == 1){
+                    clearLines(linia);
+                    hideCursor();
+                    cout<<"\n\n\n";
+                    Sleep(700);
+                    setColor(cMenu);
+                    setCenter(53); cout<<"- Ah! Ju¾ zapomniaˆem ¾e wy nie m¢wicie w Invj©zyku\n\n";
+                    Sleep(1900);
+                    setCenter(37); cout<<"- Dawno nie byˆo tu ¾adnego czˆowieka\n\n";
+                    Sleep(2200);
+                    setCenter(41); cout<<"- Oto¾, widz© ¾e masz ju¾ jaka˜ wiedz©\n\n";
+                    Sleep(1800);
+                    setCenter(23); cout<<"- Mam ja co˜ dla Ciebie..\n\n";
+                    Sleep(1200);
+                    setCenter(46); cout<<"- Ale najpierw, musz© si© upewni† co ju¾ wiesz..\n\n\n";
+                    Sleep(1000);
+                    setColor(cText);
+                    coutAnyExitInfo();
+                    pauze();
+                    know_level = 2;
+                    sel = 1;
+                    clear();
+                }
+            }
+            else if(sel == 1){
+                clearLines(linia);
+                cout<<"\n\n\n";
+                setColor(cMenu);
+                setCenter(53); cout<<"- Podam Ci liter©, a Ty je˜li znasz, podasz mi dwie liczby\n\n";
+
+                if((checkLetter('L', 2, 4)) && (checkLetter('B', 10, 3)) && (checkLetter('X', 10, 9))){
+                    //good
+                    know_level = 3;
+                }
+                else{
+                    //nope
+                }
+
+                setColor(cText);
+
+                hideCursor();
+                coutAnyExitInfo();
+                pauze();
+                clear();
+            }
+            else if(sel == 2){
+
+            }
+            else if(sel == 3){
+
+            }
+        }
+        
+
     }
 
 }
@@ -683,7 +833,7 @@ void karteczka(){
         if(key == 13){
             system("start notepad.exe");
             Sleep(100);
-            writeFromKeys("POD RUDYM KOT3M M4JA NAJLEP5ZA POTRAWKE Z DZ1KA");
+            writeFromKeys("'POD RUDYM KOT3M' M4JA NAJLEP5ZA POTRAWKE Z DZ1KA");
             //3451
 
             kot=true;
@@ -693,7 +843,7 @@ void karteczka(){
             setColor(cYes);
             setCenter(30); cout<<"*dopisuj© do listy w ekwipunku*\n";
             setColor(cText);
-            printToEq("dziwna karteczka od elfa: \"pod rudym kot3m m4ja najlep5za potrawke z dz1ka\"");
+            printToEq("dziwna karteczka od elfa: \"'Pod Rudym Kot3m' m4ja najlep5za potrawke z dz1ka\"");
             
             Sleep(1000);
             coutAnyExitInfo();

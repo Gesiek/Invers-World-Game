@@ -208,9 +208,9 @@ void clear() {
     system("cls");
 }
 
-void coutMenu(string tab[], int n, int which_one) {
+void coutMenu(string tab[], int n, int which_one, int from = 0) {
 
-    for (int i = 0; i < n; i++) {
+    for (int i = from; i < n; i++) {
         if (i == which_one) {
             setCenter(tab[i].length());
             cout << tab[i] << " <-" << endl;
