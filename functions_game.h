@@ -326,7 +326,7 @@ void mysliwy(bool* flag){
 
     int enter{};
     int sel{};
-    static int know_level = 5;
+    static int know_level = 1;
     string menuM[] = {"Eee, co?", "1.", "2.", "3.", "4.", "Zapytaj o nagrod©"};
 
     if(know_level == 7){
@@ -578,6 +578,7 @@ void mysliwy(bool* flag){
                 coutAnyExitInfo();
                 pauze();
                 know_level = 7;
+                access_level = 4;
                 break;
 
             }

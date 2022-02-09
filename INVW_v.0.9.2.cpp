@@ -12,18 +12,19 @@ int cZiem = 6;
 int cTraw = 7;
 int cWoda = 8;
 
+int access_level = 1;
+
 #include "functions_misc.h"
 #include "functions_UI.h"
 #include "functions_game.h"
 
-int access_level = 4;
 
 int main() {
 
     
     //SetConsoleTitle(L"Projekt w fazie test¢w 1!");
     //SetConsoleTitleW(L"Projekt w fazie test¢w 2!");
-    SetConsoleTitleA("Projekt w fazie test¢w - last level!");
+    SetConsoleTitleA("Projekt w fazie test¢w - just last step!");
 
     //ShowWindow(GetConsoleWindow(), SW_NORMAL);
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
