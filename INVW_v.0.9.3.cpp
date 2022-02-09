@@ -12,7 +12,7 @@ int cZiem = 6;
 int cTraw = 7;
 int cWoda = 8;
 
-int access_level = 1;
+int access_level = 0;
 
 #include "functions_misc.h"
 #include "functions_UI.h"
@@ -116,7 +116,7 @@ int main() {
             }
             if (ffinal) {
                 if(access_level == 4){
-                    final(&ffinal, &selected);
+                    final(&ffinal);
                 }
                 else{
                     ffinal = false;

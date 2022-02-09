@@ -116,7 +116,7 @@ int intInput(int inputLine, bool poziomX, int wod, int wdo) {
         setCursorPosition(0, inputLine);
 
         if (poziomX) {
-            cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. jaka˜ liczba? litera? " << endl;
+            cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. mo¾e jaka˜ litera? " << endl;
             cout << "Wsp¢ˆrz©dna |pionowa|: ";
         }
         else {
@@ -131,7 +131,7 @@ int intInput(int inputLine, bool poziomX, int wod, int wdo) {
             setCursorPosition(0, inputLine);
 
             if (poziomX) {
-                cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. jaka˜ liczba? litera? " << endl;
+                cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. mo¾e jaka˜ litera? " << endl;
                 cout << "Wsp¢ˆrz©dna |pionowa|: ";
             }
             else {
@@ -984,7 +984,8 @@ void karteczka(){
             kot=true;
             Sleep(1000);
             cout<<"\n\n";
-            setCursorPosition(0, linia + 2);
+            clearLines(linia);
+            cout<<"\n\n";
             setColor(cYes);
             setCenter(22); cout<<"*dodaj© do ekwipunku*\n";
             setColor(cText);
@@ -1063,7 +1064,7 @@ void level4(bool* outflag, int* selected) {
 
 }
 
-void final(bool* outflag, int* selected){
+void final(bool* outflag){
 
     int enter{};
     static int baccess = 1;
@@ -1078,13 +1079,13 @@ void final(bool* outflag, int* selected){
         writeFromFile("./resources/F/portal");
         setColor(cText);
 
-        coutMenu(menuF, 1, *selected);
+        coutMenu(menuF, 1, 0);
         coutEscExitInfo();
 
         enter = quickMenuHandling(outflag);
 
         if (enter == 1) {
-            *outflag = false;
+
         }
 
     }

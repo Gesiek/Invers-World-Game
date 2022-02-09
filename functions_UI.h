@@ -199,7 +199,7 @@ void clearLines(int lin) {
     }
     cout << "\b \b";
 
-    showCursor();
+    hideCursor();
 }
 
 void clear() {
@@ -383,7 +383,7 @@ int menuHandling(int* selected, int first, int last, bool* fmenu, bool eq = true
     return 0;
 }
 
-int quickMenuHandling(bool* fmenu) {
+int quickMenuHandling(bool* fmenu, bool eq=true) {
 
     int key = _getch();
 
@@ -395,7 +395,9 @@ int quickMenuHandling(bool* fmenu) {
         *fmenu = false;
         break;
     case 105: //I
-        showEq();
+        if(eq) {
+            showEq();
+        }
         break;
     default:
         break;
@@ -417,7 +419,7 @@ void resetStats() {
 
 }
 
-void setResolution(){
+void changeWindowSize(){
 
     static int size{};
     bool outflag = true;
@@ -445,10 +447,10 @@ void setResolution(){
                     //fullScreen();
                     clear();
                     cout<<endl;
-                    setCenter(9); cout<<"Ustawiam..\n";
+                    //setCenter(9); cout<<"Ustawiam..\n";
                     fullScreen();
                     //goFullscreen();
-                    cout<<endl;
+                    //cout<<endl;
                     //setCenter(9); cout<<"Ustawiam..\n";
                     hideScrollbars();
                     hideCursor();
@@ -459,8 +461,8 @@ void setResolution(){
             if (sel == 1) {
                 if(size != 1){
                     clear();
-                    cout<<endl;
-                    setCenter(9); cout<<"Ustawiam..\n"; //max 
+                    //cout<<endl;
+                    //setCenter(9); cout<<"Ustawiam..\n"; //max 
                     _COORD xy = calcMaxGoodWindow();
 
                     if(size == 0){
@@ -566,7 +568,7 @@ void startHandling(int* selected, bool* fmenu, bool* fstart) {
             resetStats();
         }
         if (*selected == 2) {
-            setResolution();
+            changeWindowSize();
         }
         if (*selected == 3) {
             *fstart = false;
