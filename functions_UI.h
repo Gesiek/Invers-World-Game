@@ -220,6 +220,8 @@ void coutMenu(string tab[], int n, int which_one, int from = 0) {
             cout << tab[i] << endl;
         }
     }
+    hideCursor();
+    hideScrollbars();
 
 }
 
