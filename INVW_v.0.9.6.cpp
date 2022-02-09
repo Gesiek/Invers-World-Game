@@ -13,18 +13,19 @@ int cTraw = 7;
 int cWoda = 8;
 
 int access_level = 0;
+//int access_level = 4;
+string napis = "*tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk j p zynjsovxot uweje zs©dxk˜mso bntdwmirn*";
+//my˜liwy numer jeden otwiera tylko w przez trzy podziel¥ minute i o podzielnej przez pi©tna˜cie sekundzie
 
 #include "functions_misc.h"
 #include "functions_UI.h"
 #include "functions_game.h"
 
-
 int main() {
-
     
     //SetConsoleTitle(L"Projekt w fazie test¢w 1!");
     //SetConsoleTitleW(L"Projekt w fazie test¢w 2!");
-    SetConsoleTitleA("Projekt w fazie test¢w - just last step!");
+    SetConsoleTitleA("Projekt w fazie test¢w :: Well, I think it's done!");
 
     //ShowWindow(GetConsoleWindow(), SW_NORMAL);
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
@@ -68,11 +69,11 @@ int main() {
     while (fstart) {
 
         clear();
-        cout<<"\n";
+        cout<<"\n\n";
         setColor(cMenu);
         setCenter(21); cout << "Witaj w Invers World!\n";
         setCenter(26); cout << "czyli przygodowej zagadce\n\n";
-        setCenter(40); cout << "Czy jeste˜ got¢w stawi† czoˆa wyzwaniom?\n\n";
+        setCenter(40); cout << "Czy jeste˜ got¢w stawi† czoˆa wyzwaniom?\n\n\n";
 
         //wy˜wietlenie start menu
         setColor(cText);

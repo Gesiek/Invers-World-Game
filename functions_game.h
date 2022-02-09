@@ -116,33 +116,44 @@ int intInput(int inputLine, bool poziomX, int wod, int wdo) {
         setCursorPosition(0, inputLine);
 
         if (poziomX) {
-            cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. mo¾e jaka˜ litera? " << endl;
+            setCenter(60);
+            cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. mo¾e jaka˜ litera?" << endl;
+            setCenter(26);
             cout << "Wsp¢ˆrz©dna |pionowa|: ";
         }
         else {
+            setCenter(26);
             cout << "Wsp¢ˆrz©dna -pozioma-: ";
         }
 
         while (!(cin >> a)) {
 
-            cout << "Nosz pisz jak czˆowiek  " << endl;
+            hideCursor();
+            cout<<"\n";
+            setCenter(23);
+            cout << "Nosz pisz jak czˆowiek" << endl;
+
             Sleep(1000);
             clearLines(inputLine);
             setCursorPosition(0, inputLine);
 
             if (poziomX) {
-                cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. mo¾e jaka˜ litera? " << endl;
+                setCenter(60);
+                cout << "Tu gdzie˜ napewno jest co˜ ukrytego.. mo¾e jaka˜ litera?" << endl;
+                setCenter(26);
                 cout << "Wsp¢ˆrz©dna |pionowa|: ";
             }
             else {
+                setCenter(26);
                 cout << "Wsp¢ˆrz©dna -pozioma-: ";
             }
 
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
+            showCursor();
         }
 
+        hideCursor();
         if (a == 0) {
             //wyj˜cie
             break;
@@ -152,7 +163,10 @@ int intInput(int inputLine, bool poziomX, int wod, int wdo) {
             break;
         }
         else {
-            cout << "Takiej wsp¢ˆrz©dnej nie ma" << endl;
+            hideCursor();
+            cout<<"\n";
+            setCenter(40);
+            cout << "Takiej wsp¢ˆrz©dnej przecie¾ nie ma!" << endl;
             Sleep(1000);
             clearLines(inputLine);
         }
@@ -177,21 +191,28 @@ bool showPicture(string nazwa, int wspLitX, int wspLitY, int maxX, int maxY) {
     int yy{};
     int x{}, y{};
 
+    cout<<"\n";
     yy = printImage(nazwa);
+    cout<<"\n";
+
+    yy = yy + 2;
 
     while (!fPicture) {
 
         showCursor();
-
         x = intInput(yy, true, 1, maxX);
+        hideCursor();
         if (x == 0) break;
 
+        showCursor();
         y = intInput(yy + 2, false, 1, maxY);
+        hideCursor();
         if (y == 0) break;
 
         if (x == wspLitX && y == wspLitY) {
             setColor(cYes);
-            setCenter(5); cout << "Nice!" << endl;
+            cout<<"\n";
+            setCenter(4); cout << "Tak!" << endl;
             setCenter(31); cout << "*zapisano do listy w ekwipunku*" << endl;
             hideCursor();
             Sleep(1500);
@@ -200,6 +221,8 @@ bool showPicture(string nazwa, int wspLitX, int wspLitY, int maxX, int maxY) {
         }
         else {
             setColor(cNo);
+            cout<<"\n";
+            setCenter(4);
             cout << "Nope";
             hideCursor();
             Sleep(1000);
@@ -260,6 +283,9 @@ void level1(bool* outflag, int* selected) {
                     }
                 }
             }
+            if(o1 && o2 && o3){
+                if(access_level == 0) access_level = 1;
+            }
         }
     }
 
@@ -277,8 +303,9 @@ bool checkTime(){
 
     int sec = ltime.tm_sec;
 
-    //lekkie uˆatwienie (..1, 14..)
-    if(((ltime.tm_min) % 3 == 0) && ((sec % 15 == 0) || (sec % 15 == 1) || (sec % 15 == 14))){
+    //uˆatwienie (..1, 14..)
+    //if(((ltime.tm_min) % 3 == 0) && ((sec % 15 == 0) || (sec % 15 == 1) || (sec % 15 == 14))){
+    if(((ltime.tm_min) % 3 == 0) && ((sec % 15 == 0))){
         return true;
     }
     else{
@@ -558,6 +585,7 @@ void mysliwy(bool* flag){
                 Sleep(1500);
 
                 writeFromFile("./resources/2/przedmiot");
+                if(access_level <= 3) access_level = 4;
                 printToEq("nagroda my˜liwego - Zˆoty Szpon");
 
                 Sleep(4000);
@@ -637,7 +665,7 @@ void level2(bool* outflag, int* selected) {
 
 }
 
-/*0-19, dˆugo˜† wody, pr©dko˜† w [ms]*/
+/*0-19 (kt¢ry kafelek), dˆugo˜† wody, pr©dko˜† w [ms]*/
 bool bridgeBuild(int which_field, int length, int speed = 250) {
 
     int max_field = 20;
@@ -650,6 +678,7 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
         return false;
     }
 
+    hideCursor();
     cout << endl;
     //rysuj g¢rn¥ platforme
     setColor(cTraw);
@@ -689,13 +718,12 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
     setCursorPosition(0, linia);
     setCenter(15); cout << "Przygotuj si©!" << endl;
 
-    hideCursor();
-    Sleep(2000);
-    showCursor();
-
+    Sleep(1500);
     clearLines(linia);
 
     setCenter(max_field);
+
+    showCursor();
 
     while (1) {
 
@@ -758,7 +786,10 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
         setColor(cYes);
         setCursorPosition(0, (linia + (length / 2)) - 1);
         setCenter(7); cout << "Dobrze!" << endl;
-        this_thread::sleep_for(1500ms);
+        this_thread::sleep_for(1000ms);
+        cout<<"\n\n";
+        coutAnyExitInfo();
+        pauze();
         setColor(cText);
         return true;
     }
@@ -778,12 +809,11 @@ void coutBridgeHelp(bool* flag) {
     clear();
 }
 
+/*wyspa, itemy, zaszyfrowana karteczka*/
 void wyspa(bool* flag) {
 
     int key{};
     static bool kartka{};
-    string napis = "*tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk j p zynjsovxot uweje zs©dxk˜mso bntdwmirn*";
-    //my˜liwy numer jeden otwiera tylko w przez trzy podziel¥ minute i o podzielnej przez pi©tna˜cie sekundzie
 
     while (*flag) {
         clear();
@@ -791,6 +821,11 @@ void wyspa(bool* flag) {
         setColor(cMenu);
         writeFromFile("./resources/3/wyspa");
         setColor(cText);
+
+        if(!kartka){
+            printToEq("br¥zowe futro");
+            printToEq("kilka niebieskich kamyk¢w");
+        }
 
         setCenter(30);
         cout << "Spr¢buj otworzy† skrzynk© <-" << endl;
@@ -805,11 +840,13 @@ void wyspa(bool* flag) {
             setCenter(108); cout<<napis<<"\n\n";
             setColor(cText);
             if(!kartka){
-                kartka=true;
-                printToEq("\nzaszyfrowana karteczka ze skrzynki na wyspie:\n*" + napis + "*\n");
+                kartka = true;
+                printToEq("17 zˆotych monet");
+                printToEq("zaszyfrowana karteczka ze skrzynki na wyspie:\n" + napis + "\n");
             }
             coutAnyExitInfo();
             pauze();
+            if(access_level <= 1) access_level = 2;
         }
         if (key == 27) {
             *flag = false;
@@ -846,7 +883,7 @@ void level3(bool* outflag, int* selected) {
                 if (fHelp) {
                     coutBridgeHelp(&fHelp);
                 }
-                if (bridgeBuild(5, 2, 250)) {
+                if (bridgeBuild(4, 5, 350)) {
                     if (bridge_access == 1) {
                         bridge_access = 2;
                     }
@@ -854,7 +891,7 @@ void level3(bool* outflag, int* selected) {
             }
             if (*selected == 1) {
                 clear();
-                if (bridgeBuild(1, 2, 250)) {
+                if (bridgeBuild(7, 8, 250)) {
                     if (bridge_access == 2) {
                         bridge_access = 3;
                     }
@@ -862,7 +899,7 @@ void level3(bool* outflag, int* selected) {
             }
             if (*selected == 2) {
                 clear();
-                if (bridgeBuild(0, 2, 250)) {
+                if (bridgeBuild(5, 10, 200)) {
                     if (bridge_access == 3) {
                         bridge_access = 4;
                     }
@@ -914,6 +951,9 @@ void maszyna(bool* mflag) {
 
         cout << endl;
         setCenter(txt.length());
+        if(deszyfrLin(txt) == deszyfrLin(napis)){
+            if(access_level <= 2) access_level = 3;
+        }
         cout << deszyfrLin(txt) << endl;
 
         coutAnyExitInfo();
@@ -1064,12 +1104,39 @@ void level4(bool* outflag, int* selected) {
 
 }
 
+bool eqCheck(string str){
+
+    ifstream eq;
+    string txt;
+
+    eq.open("./resources/eqlist");
+
+    if (eq.is_open()) {
+
+        while(!eq.eof()){
+            eq>>txt;
+            //cout<<txt<<endl;
+            if(txt == str){
+                return true;
+            }
+        }
+        
+        eq.close();
+    }
+    else{
+        cout<<"Bˆ¥d otwarcia eq"<<endl;
+        Sleep(1000);
+        return false;
+    }
+    
+    return false;
+}
+
 void final(bool* outflag){
 
     int enter{};
-    static int baccess = 1;
     string menuF[] = {"Spr¢buj wej˜†"};
-    bool bflag{};
+    bool flag{};
 
     while(*outflag){
         
@@ -1085,7 +1152,115 @@ void final(bool* outflag){
         enter = quickMenuHandling(outflag);
 
         if (enter == 1) {
+            
+            int sel{};
+            string menuD[] = {"Poka¾ 17 zˆotych monet", "Poka¾ br¥zowe futro", "Poka¾ niebieskie kamyki", "Poka¾ Zˆoty Szpon"};
+            flag = true;
 
+            while(flag){
+
+                clear();
+
+                setColor(cMenu);
+                writeFromFile("./resources/F/druid");
+                setColor(cText);
+                int linia = getCursorPosition().Y;
+
+                if((!eqCheck("17")) || (!eqCheck("szpon")) || (!eqCheck("niebieskich")) || (!eqCheck("futro"))){
+                    setCenter(37); cout<<"O kurcze, chyba wszystko przepiˆem.."<<endl;
+                    setCenter(36); cout<<"Gdzie ja posiaˆem sw¢j ekwipunek!?"<<endl;
+                    flag = false;
+                    coutAnyExitInfo();
+                    pauze();
+                    break;
+                }
+
+                coutMenu(menuD, 4, sel);
+                coutEscExitInfo();
+
+                enter = menuHandling(&sel, 0, 3, &flag);
+
+                if (enter == 1) {
+                    if (sel == 0) {
+                        clearLines(linia);
+                        cout<<"\n";
+                        Sleep(1000);
+                        setColor(cMenu);
+                        setCenter(40); cout<<"- Nic mi po nich. Nie potrzebuj© monet."<<endl;
+                        setColor(cText);
+                        Sleep(1000);
+                        cout<<"\n";
+                        coutAnyExitInfo();
+                        pauze();
+                    }
+                    if (sel == 1) {
+                        clearLines(linia);
+                        cout<<"\n";
+                        Sleep(1000);
+                        setColor(cMenu);
+                        setCenter(29); cout<<"- To nie jest interesuj¥ce.."<<endl;
+                        setColor(cText);
+                        Sleep(1000);
+                        cout<<"\n";
+                        coutAnyExitInfo();
+                        pauze();
+                    }
+                    if (sel == 2) {
+                        clearLines(linia);
+                        cout<<"\n";
+                        Sleep(1500);
+                        setColor(cMenu);
+                        setCenter(34); cout<<"- Hm.. doprawdy, s¥ rzadko˜ci¥."<<endl;
+                        Sleep(1500);
+                        cout<<"\n";
+                        setCenter(28); cout<<"- Jednak nie wystarczaj¥co."<<endl;
+                        setColor(cText);
+                        Sleep(1000);
+                        cout<<"\n";
+                        coutAnyExitInfo();
+                        pauze();
+                    }
+                    if (sel == 3) {
+                        clearLines(linia);
+                        cout<<"\n";
+                        Sleep(1500);
+                        setColor(cMenu);
+                        setCenter(22); cout<<"- Ooo! I to jest co˜!"<<endl;
+                        Sleep(2000);
+                        cout<<"\n";
+                        setCenter(25); cout<<"- Prawdziwy Zˆoty Szpon!"<<endl;
+                        Sleep(3000);
+                        cout<<"\n";
+                        setCenter(31); cout<<"- Od wiek¢w go poszukiwaˆem!"<<endl;
+                        Sleep(2000);
+                        cout<<"\n";
+                        setCenter(14); cout<<"- Dzi©ki Ci."<<endl;
+                        Sleep(2000);
+                        cout<<"\n";
+                        setCenter(32); cout<<"- A teraz id«, dobry czˆowieku."<<endl;
+                        Sleep(2000);
+                        cout<<"\n";
+                        setCenter(32); cout<<"- Niech niebiosa Ci sprzyjaj¥!"<<endl;
+                        Sleep(2000);
+                        setColor(cText);
+
+                        Sleep(2000);
+                        clear();
+                        Sleep(1000);
+
+                        cout<<"\n\n\n";
+                        writeFromFile("./img/land200.txt");
+                        cout<<"\n";
+                        setCenter(8); cout<<"THE END"<<endl;
+
+                        coutAnyExitInfo();
+                        pauze();
+                        exit(0);
+                    }
+                }
+            
+            }
+            
         }
 
     }

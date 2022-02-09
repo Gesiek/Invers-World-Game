@@ -140,6 +140,7 @@ void setCenter(int length) {
     //setCursorPosition(50, getCursorPosition().Y);
 }
 
+/*centered (zwraca ilo˜† linijek)*/
 int printImage(string name) {
 
     fstream obraz;

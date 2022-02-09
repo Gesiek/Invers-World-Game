@@ -237,15 +237,16 @@ void coutMenuDesc(int access_level) {
         writeFromFile("./resources/access1");
         break;
     case 2:
-        writeFromFile("./resources/access1");
+        writeFromFile("./resources/access2");
         break;
     case 3:
-        writeFromFile("./resources/access1");
+        writeFromFile("./resources/access3");
         break;
     case 4:
-        writeFromFile("./resources/access1");
+        writeFromFile("./resources/access4");
         break;
     default:
+        writeFromFile("./resources/access0");
         break;
     }
     setColor(cText);
@@ -260,7 +261,7 @@ void coutEscExitInfo(bool eq = true) {
         setCenter(33); //31
         cout << "Wci˜nij \"I\", by zobaczy† ekwipunek\n";
     }
-    setCenter(30); //26
+    setCenter(29); //26
     cout << "Wci˜nij \"ESC\", by si© wycofa†";
     setColor(cText);
 }
@@ -338,7 +339,7 @@ void printToEq(string txt) {
     fstream eq;
     eq.open("./resources/eqlist", ios::app);
     if (eq.is_open()) {
-        eq << txt << endl;
+        eq << "+ " << txt << endl;
         eq.close();
     }
 }
