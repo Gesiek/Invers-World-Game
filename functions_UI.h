@@ -202,6 +202,7 @@ void clearLines(int lin) {
     hideCursor();
 }
 
+/*system("cls");*/
 void clear() {
     //Sleep(1);
     this_thread::sleep_for(1ms);
@@ -253,6 +254,7 @@ void coutMenuDesc(int access_level) {
 
 }
 
+/*wy˜wietlenie ESC, by si© wycofa† i I, by zobaczy† ekwipunek*/
 void coutEscExitInfo(bool eq = true) {
 
     cout << "\n\n";
@@ -261,7 +263,7 @@ void coutEscExitInfo(bool eq = true) {
         setCenter(33); //31
         cout << "Wci˜nij \"I\", by zobaczy† ekwipunek\n";
     }
-    setCenter(29); //26
+    setCenter(30); //26
     cout << "Wci˜nij \"ESC\", by si© wycofa†";
     setColor(cText);
 }
@@ -350,6 +352,7 @@ int menuControl() {
 }
 
 /*aktualnie wybrany; 0; ilosc pozycji w menu-1; flaga na wyj˜cie*/
+/*zwraca 1 je˜li klikniesz Enter; ESC przeˆ¥cza flage fmenu, I otwiera ekwipunek*/
 int menuHandling(int* selected, int first, int last, bool* fmenu, bool eq = true) {
 
     int key = _getch();

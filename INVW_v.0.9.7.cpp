@@ -2,7 +2,7 @@
 
 using namespace std;
 
-//colors set
+//przypisanie nazw do warto˜ci liczbowych kolor¢w w tablicy
 int cMenu = 1;
 int cText = 2;
 int cExit = 3;
@@ -13,9 +13,10 @@ int cTraw = 7;
 int cWoda = 8;
 
 int access_level = 0;
-//int access_level = 4;
+//int access_level = 4; //skr¢t do odblokowania ostatniego etapu gry 
+
 string napis = "*tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk j p zynjsovxot uweje zs©dxk˜mso bntdwmirn*";
-//my˜liwy numer jeden otwiera tylko w przez trzy podziel¥ minute i o podzielnej przez pi©tna˜cie sekundzie
+//zaszyfrowana wiadomo˜†
 
 #include "functions_misc.h"
 #include "functions_UI.h"
@@ -23,28 +24,28 @@ string napis = "*tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk 
 
 int main() {
     
-    //SetConsoleTitle(L"Projekt w fazie test¢w 1!");
-    //SetConsoleTitleW(L"Projekt w fazie test¢w 2!");
-    SetConsoleTitleA("Projekt w fazie test¢w :: Well, I think it's done!");
+    SetConsoleTitleA("Invers World the Game :: koäcowa faza test¢w");
 
     //ShowWindow(GetConsoleWindow(), SW_NORMAL);
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
     
-    fullScreen();
+    fullScreen(); //wˆ¥czenie trybu peˆnoekranowego przy uruchomieniu
     //goFullscreen();
-    
     //showInfos();
-    setColorsTable();
-    hideCursor();
 
-    setColor(cText);
-    printImage("./img/intro.txt");
+    setColorsTable(); //ustawienie odpowiednich warto˜ci kolor¢w 
 
-    hideScrollbars();
+    hideCursor(); //ukrycie migaj¥cego kursora
 
-    loadingScreen(5);
+    setColor(cText); //ustawienie bie¾¥cego koloru
 
+    printImage("./img/intro.txt"); //wy˜wietlenie loga
 
+    hideScrollbars(); //ustawienie braku scrollbar'¢w
+
+    loadingScreen(7); //imitacja "ekranu ˆadowania" ;}
+
+    //flagi wej˜cia - startMenu / menu / poszczeg¢lne lokacje
     bool fmenu = false;
     bool fstart = true;
     bool flvl1 = false;
@@ -52,44 +53,50 @@ int main() {
     bool flvl3 = false;
     bool flvl4 = false;
     bool ffinal = false;
-    int key{};
-    int selected{};
-    int enter{};
+    int key{}; //do numeru wcisnietego klawisza
+    int selected{}; //akualnie wybrana opcja w menu
+    int enter{}; //czy wcisniety enter
 
+    //tablica z opcjami odpowiedniego menu
     string start[4] = { "Rozpocznij gr©", "Wyczy˜† ekwipunek", "Zmieä wieko˜† okna", "Wyjd«" };
     string menu[5] = { "Dziwny pok¢j", "Drzwi", "Jezioro", "Plac Gˆ¢wny", "???" };
 
-    //int width = consoleScreenBufferInfo.dwSize.X;
-    
-    //fullScreen();
-    //fullScreen();
-    hideScrollbars();
-    hideCursor();
-
     while (fstart) {
 
-        clear();
+        clear(); //czyszczenie ekranu
+
         cout<<"\n\n";
+
         setColor(cMenu);
         setCenter(21); cout << "Witaj w Invers World!\n";
         setCenter(26); cout << "czyli przygodowej zagadce\n\n";
         setCenter(40); cout << "Czy jeste˜ got¢w stawi† czoˆa wyzwaniom?\n\n\n";
-
-        //wy˜wietlenie start menu
         setColor(cText);
-        coutMenu(start, 4, selected);
 
+        //wy˜wietlenie startMenu
+        coutMenu(start, 4, selected);
+        
+        //do obsˆugi opcji startMenu
         startHandling(&selected, &fmenu, &fstart);
 
+        //je˜li flaga fmenu przeˆ¥czy si© na true to wchodzi do tego while'a (menu)
         while (fmenu) {
 
             clear();
+
+            //wy˜wietlenie opisu do menu zale¾nie od tego na jakim etapie jest gracz
             coutMenuDesc(access_level);
+
+            //wy˜wietlenie menu, selected - kt¢ra opcja "<-"
             coutMenu(menu, 5, selected);
+
+            //wy˜wietlenie ESC, by si© wycofa† i I, by zobaczy† ekwipunek
             coutEscExitInfo();
 
+            //do obsˆugi menu
             enter = menuHandling(&selected, 0, 4, &fmenu);
 
+            //je˜li klikniesz Enter to przeˆ¥czy si© dana flaga poziomu
             if (enter == 1) {
                 if (selected == 0) flvl1 = true;
                 if (selected == 1) flvl2 = true;
@@ -99,8 +106,14 @@ int main() {
                 selected = 0;
             }
 
+            //je˜li dana flaga przeˆ¥czona, program wchodzi
             if (flvl1) {
+                //i rozpoczyna dany poziom/level/lokacje
+                //&flvl - ¾eby przeˆ¥czy† na false przy wychodzienu
+                //&selected - fsumie, tak o, ¾eby nie robi† nowej zmiennej
                 level1(&flvl1, &selected);
+                //po wyj˜ciu z poziomu
+                //selected na odpowiedni¥ warto˜† ¾eby "<-" si© zgadzaˆa, wtedy wida† sk¥d 'przyszli˜my'
                 selected = 0;
             }
             if (flvl2) {
@@ -116,14 +129,17 @@ int main() {
                 selected = 3;
             }
             if (ffinal) {
+                //dost©pny tylko gdy access_level == 4
                 if(access_level == 4){
                     final(&ffinal);
                 }
                 else{
+                    //normalnie tu nic nie ma
                     ffinal = false;
                     clear();
                     writeFromFile("./resources/fdesc");
                     coutAnyExitInfo();
+                    //system("pause > nul");
                     pauze();
                 }
                 selected = 4;
@@ -133,9 +149,11 @@ int main() {
 
     }
 
+    //wychodzenie/zamykanie
+    //loadingScreen na ˜rodku ekranu, mniej wi©cej
     clear();
     cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-    loadingScreen(2);
+    loadingScreen(3);
 
     return 0;
 }

@@ -187,11 +187,11 @@ void writeFromFile(string nazwa) {
     }
 
 }
-
+/*system("pause > nul");*/
 void pauze(){
     system("pause > nul");
 }
-
+/*system("pause");*/
 void pause(){
     system("pause");
 }

@@ -515,7 +515,7 @@ void mysliwy(bool* flag){
                 string kot{};
                 showCursor();
                 cout<<endl;
-                setColor(cText); setCenter(18); cout<<"wpisz kod: "; cin>>kot;
+                setColor(cText); setCenter(14); cout<<"wpisz kod: "; cin>>kot;
 
                 if(kot == "3451"){
                     //good
@@ -727,8 +727,6 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
 
     while (1) {
 
-        Sleep(speed);
-
         if (_kbhit()) {
 
             key = _getch();
@@ -751,6 +749,7 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
                     this_thread::sleep_for(1500ms);
                     setColor(cText);
 
+                    cout<<"\n\n\n\n\n\n\n\n";
                     coutAnyExitInfo();
                     pauze();
 
@@ -779,6 +778,9 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
             flag = true;
             break;
         }
+
+        Sleep(speed);
+
     }
 
     if (flag) {
@@ -787,7 +789,7 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
         setCursorPosition(0, (linia + (length / 2)) - 1);
         setCenter(7); cout << "Dobrze!" << endl;
         this_thread::sleep_for(1000ms);
-        cout<<"\n\n";
+        cout<<"\n\n\n\n\n\n\n\n";
         coutAnyExitInfo();
         pauze();
         setColor(cText);
@@ -1166,9 +1168,9 @@ void final(bool* outflag){
                 setColor(cText);
                 int linia = getCursorPosition().Y;
 
-                if((!eqCheck("17")) || (!eqCheck("szpon")) || (!eqCheck("niebieskich")) || (!eqCheck("futro"))){
-                    setCenter(37); cout<<"O kurcze, chyba wszystko przepiˆem.."<<endl;
-                    setCenter(36); cout<<"Gdzie ja posiaˆem sw¢j ekwipunek!?"<<endl;
+                if((!eqCheck("17")) || (!eqCheck("Szpon")) || (!eqCheck("niebieskich")) || (!eqCheck("futro"))){
+                    setCenter(33); cout<<"O kurcze, chyba co˜ przepiˆem.."<<endl;
+                    setCenter(22); cout<<"Gdzie m¢j ekwipunek?!"<<endl;
                     flag = false;
                     coutAnyExitInfo();
                     pauze();

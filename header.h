@@ -18,8 +18,6 @@
 
 #undef max
 
-#include <chrono>
-
 CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
 CONSOLE_SCREEN_BUFFER_INFOEX consoleScreenBufferInfoex;
 CONSOLE_FONT_INFOEX consoleFontInfo;
