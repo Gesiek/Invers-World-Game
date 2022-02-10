@@ -1,7 +1,7 @@
-\*project nearly done\*
+\*project currently at testing\*
 
-it's runnable at this moment XD
+- but it's runnable at this moment
 
-so, to play just simply run .exe file
+- to play just simply run .exe file
 
-never mind run.bat for now
+- never mind run.bat for now
