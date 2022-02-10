@@ -1,4 +1,5 @@
-\*project currently at testing\*
+\*project currently at testing\*\n
+\*t after version number means version in testing mode\*
 
 - but it's runnable at this moment
 
