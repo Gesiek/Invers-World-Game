@@ -1,6 +1,131 @@
 #pragma once
 
-using namespace std;
+int getAccessLvl(){
+    
+    ifstream acc; //odczyt
+    int x{};
+
+    acc.open("./resources/curr_access");
+
+    if (acc.is_open()) { //je˜li ok to odczytuje
+
+        acc>>x;
+        cout<<"current access: "<<x<<endl;
+        pause();
+        acc.close();
+    
+        return x;
+    }
+    else{ //jak nie ma to tworzy i wpisuje
+        
+        cout<<"Brak pliku *curr_access*. Tworz©.."<<endl;
+        pause();
+
+        ofstream create_acc; //zapis
+        create_acc.open("./resources/curr_access");
+        create_acc<<0;
+        create_acc.close();
+
+        return 0;
+    }
+
+    return 0;
+}
+
+void setAccessLevel(int acc_lvl){
+    
+    access_level = acc_lvl;
+
+    ofstream acc; //zapis
+
+    acc.open("./resources/curr_access");
+
+    if (acc.is_open()) { 
+
+        acc<<acc_lvl;
+        cout<<"Access changed"<<endl;
+        pause();
+
+        acc.close();
+
+    }
+    else{
+        cout<<"Bˆ¥d otwarcia pliku *curr_access*"<<endl;
+        pause();
+    }
+
+}
+
+void adminTools(){
+    
+    clear();
+
+    cout<<"\n";
+    setAccessLevel(4);
+    cout<<"\n";
+    fillEq();
+    cout<<"\n\n\n";
+    setCenter(16); cout<<"All Access Added"<<endl;
+    cout<<"\n";
+    setCenter(19); cout<<"All Equipment Added"<<endl;
+
+    coutAnyExitInfo();
+    pauze();
+}
+
+void resetProgres() {
+
+    clear();
+
+    clearEq();
+
+    setAccessLevel(0);
+
+    setCenter(17); cout<<"Progres usuni©ty";
+
+    this_thread::sleep_for(1s);
+    
+    coutAnyExitInfo();
+    pauze();
+}
+
+void startHandling(int* selected, bool* fmenu, bool* fstart) {
+
+    int key = _getch();
+
+    switch (key) {
+    case 72: // do gory
+        if (*selected > 0) {
+            (*selected)--;
+        }
+        break;
+    case 80: // w dol
+        if (*selected < 4) {
+            (*selected)++;
+        }
+        break;
+    case 13: // enter
+        if (*selected == 0) {
+            *fmenu = true;
+        }
+        if (*selected == 1) {
+            resetProgres();
+        }
+        if (*selected == 2) {
+            changeWindowSize();
+        }
+        if (*selected == 3) {
+            adminTools();
+        }
+        if (*selected == 4) {
+            *fstart = false;
+        }
+        break;
+    default:
+        break;
+    }
+
+}
 
 string szyfrPoj(string txt) {
 
@@ -284,7 +409,9 @@ void level1(bool* outflag, int* selected) {
                 }
             }
             if(o1 && o2 && o3){
-                if(access_level == 0) access_level = 1;
+                if(access_level == 0) {
+                    setAccessLevel(1);
+                }
             }
         }
     }
@@ -585,7 +712,9 @@ void mysliwy(bool* flag){
                 Sleep(1500);
 
                 writeFromFile("./resources/2/przedmiot");
-                if(access_level <= 3) access_level = 4;
+                if(access_level <= 3) {
+                    setAccessLevel(4);
+                }
                 printToEq("nagroda my˜liwego - Zˆoty Szpon");
 
                 Sleep(4000);
@@ -848,7 +977,9 @@ void wyspa(bool* flag) {
             }
             coutAnyExitInfo();
             pauze();
-            if(access_level <= 1) access_level = 2;
+            if(access_level <= 1) {
+                setAccessLevel(2);
+            }
         }
         if (key == 27) {
             *flag = false;
@@ -954,7 +1085,9 @@ void maszyna(bool* mflag) {
         cout << endl;
         setCenter(txt.length());
         if(deszyfrLin(txt) == deszyfrLin(napis)){
-            if(access_level <= 2) access_level = 3;
+            if(access_level <= 2) {
+                setAccessLevel(3);
+            }
         }
         cout << deszyfrLin(txt) << endl;
 
@@ -1104,34 +1237,6 @@ void level4(bool* outflag, int* selected) {
         }
     }
 
-}
-
-bool eqCheck(string str){
-
-    ifstream eq;
-    string txt;
-
-    eq.open("./resources/eqlist");
-
-    if (eq.is_open()) {
-
-        while(!eq.eof()){
-            eq>>txt;
-            //cout<<txt<<endl;
-            if(txt == str){
-                return true;
-            }
-        }
-        
-        eq.close();
-    }
-    else{
-        cout<<"Bˆ¥d otwarcia eq"<<endl;
-        Sleep(1000);
-        return false;
-    }
-    
-    return false;
 }
 
 void final(bool* outflag){

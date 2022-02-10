@@ -1,4 +1,4 @@
-#include "header.h"
+#include "./h/header.h"
 
 using namespace std;
 
@@ -13,23 +13,28 @@ int cTraw = 7;
 int cWoda = 8;
 
 int access_level = 0;
-//int access_level = 4; //skr¢t do odblokowania ostatniego etapu gry 
+//int access_level = 4; //skr¢t do odblokowania ostatniego etapu gry //0-4
 
 string napis = "*tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk j p zynjsovxot uweje zs©dxk˜mso bntdwmirn*";
 //zaszyfrowana wiadomo˜†
 
-#include "functions_misc.h"
-#include "functions_UI.h"
-#include "functions_game.h"
+#include "./h/functions_misc.h"
+#include "./h/functions_UI.h"
+#include "./h/functions_game.h"
 
 int main() {
     
+    //okre˜lenie poziomu 'wiedzy'/progresu gry
+    access_level = getAccessLvl();
+
+    //tytuˆ okna
     SetConsoleTitleA("Invers World the Game :: koäcowa faza test¢w");
 
-    //ShowWindow(GetConsoleWindow(), SW_NORMAL);
-    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
-    
     fullScreen(); //wˆ¥czenie trybu peˆnoekranowego przy uruchomieniu
+    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+    //setWindow(190, 50, false);
+    //moveWindowTo(0, 0, true);
+    //ShowWindow(GetConsoleWindow(), SW_NORMAL);
     //goFullscreen();
     //showInfos();
 
@@ -43,7 +48,7 @@ int main() {
 
     hideScrollbars(); //ustawienie braku scrollbar'¢w
 
-    loadingScreen(7); //imitacja "ekranu ˆadowania" ;}
+    loadingScreen(5); //imitacja "ekranu ˆadowania" ;}
 
     //flagi wej˜cia - startMenu / menu / poszczeg¢lne lokacje
     bool fmenu = false;
@@ -58,7 +63,7 @@ int main() {
     int enter{}; //czy wcisniety enter
 
     //tablica z opcjami odpowiedniego menu
-    string start[4] = { "Rozpocznij gr©", "Wyczy˜† ekwipunek", "Zmieä wieko˜† okna", "Wyjd«" };
+    string start[5] = { "Rozpocznij gr©", "Wyczy˜† progres", "Zmieä wieko˜† okna", "*Admin tools*", "Wyjd«" };
     string menu[5] = { "Dziwny pok¢j", "Drzwi", "Jezioro", "Plac Gˆ¢wny", "???" };
 
     while (fstart) {
@@ -74,7 +79,7 @@ int main() {
         setColor(cText);
 
         //wy˜wietlenie startMenu
-        coutMenu(start, 4, selected);
+        coutMenu(start, 5, selected);
         
         //do obsˆugi opcji startMenu
         startHandling(&selected, &fmenu, &fstart);
@@ -137,7 +142,8 @@ int main() {
                     //normalnie tu nic nie ma
                     ffinal = false;
                     clear();
-                    writeFromFile("./resources/fdesc");
+                    cout<<"\n";
+                    setCenter(20); cout<<"Hmm.. nic tu nie ma.\n\n";
                     coutAnyExitInfo();
                     //system("pause > nul");
                     pauze();
@@ -153,7 +159,7 @@ int main() {
     //loadingScreen na ˜rodku ekranu, mniej wi©cej
     clear();
     cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-    loadingScreen(3);
+    loadingScreen(2);
 
     return 0;
 }

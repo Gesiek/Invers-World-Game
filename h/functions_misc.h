@@ -113,14 +113,14 @@ void setColor(int k) {
 
 void setFont() {
 
-    int resolution = GetSystemMetrics(SM_CXSCREEN);
+    //int resolution = GetSystemMetrics(SM_CXSCREEN);
     //CONSOLE_FONT_INFOEX cfi;
 
     consoleFontInfo.cbSize = sizeof(consoleFontInfo);
     consoleFontInfo.nFont = 0;
-    consoleFontInfo.dwFontSize.X = 0;                   // Width of each character in the font
-    //cfi.dwFontSize.Y = 24;                  // Height
-    consoleFontInfo.dwFontSize.Y = resolution / 60;                  // Height
+    consoleFontInfo.dwFontSize.X = 0;                           // Width of each character in the font
+    //cfi.dwFontSize.Y = 24;                                    // Height
+    consoleFontInfo.dwFontSize.Y = screenX / 60;                // Height
     consoleFontInfo.FontFamily = FF_DONTCARE;
     consoleFontInfo.FontWeight = FW_NORMAL;
 
@@ -187,10 +187,12 @@ void writeFromFile(string nazwa) {
     }
 
 }
+
 /*system("pause > nul");*/
 void pauze(){
     system("pause > nul");
 }
+
 /*system("pause");*/
 void pause(){
     system("pause");
@@ -205,7 +207,7 @@ _COORD calcMaxGoodWindow(){
 
     int luka = 10;
     int x = GetLargestConsoleWindowSize(getHandle()).X - 30;
-    int y = GetLargestConsoleWindowSize(getHandle()).Y - 5;
+    int y = GetLargestConsoleWindowSize(getHandle()).Y - 6;
 
     _COORD xy{};
     xy.X = x;

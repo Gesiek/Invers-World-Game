@@ -1,6 +1,7 @@
 #pragma once
 
 /*bufer + window resize*/
+/*wielko˜ci w znakach*/
 void setWindow(int width, int height, bool altenter = true) { 
 
     int luka = 4;
@@ -328,7 +329,7 @@ void showEq() {
         cout << endl;
         setCenter(8); showTime();
         cout << "\n\n\n";
-        writeFromFile("./resources/eqlist");
+        writeFromFile("./resources/eq");
         coutAnyExitInfo();
 
         this_thread::sleep_for(250ms);
@@ -339,11 +340,91 @@ void showEq() {
 
 void printToEq(string txt) {
     fstream eq;
-    eq.open("./resources/eqlist", ios::app);
+    eq.open("./resources/eq", ios::app);
     if (eq.is_open()) {
         eq << "+ " << txt << endl;
         eq.close();
     }
+}
+
+void fillEq(){
+
+    ofstream eq; //zapis (do usuni©cia i nadpisania)
+    string str{};
+
+    eq.open("./resources/eq", ios::trunc);
+
+    if (eq.is_open()) { 
+
+        cout<<"*eq* cleared"<<endl;
+
+        fstream eq_all;
+
+        eq_all.open("./resources/all_eqs");
+
+        if (eq_all.is_open()) { 
+
+            while(!eq_all.eof()){
+                getline(eq_all, str);
+                eq<<str<<endl;
+            }
+            eq_all.close();
+
+        }
+        else{
+            cout<<"Bˆ¥d otwarcia pliku *all_eqs*"<<endl;
+        }
+        
+        cout<<"*eq* added"<<endl;
+
+        eq.close();
+        pause();
+    }
+    else{
+        cout<<"Bˆ¥d otwarcia pliku *eq*"<<endl;
+        pause();
+    }
+
+}
+
+void clearEq(){
+
+    cout << "\n";
+    //setCenter(22); 
+    cout << "Usuwam zawarto˜† z ekwipunku.." << endl;
+
+    ofstream eq;
+    eq.open("./resources/eq", ios::trunc);
+    eq.close();
+
+}
+
+bool eqCheck(string str){
+
+    ifstream eq;
+    string txt;
+
+    eq.open("./resources/eq");
+
+    if (eq.is_open()) {
+
+        while(!eq.eof()){
+            eq>>txt;
+            //cout<<txt<<endl;
+            if(txt == str){
+                return true;
+            }
+        }
+        
+        eq.close();
+    }
+    else{
+        cout<<"Bˆ¥d otwarcia *eq*"<<endl;
+        Sleep(1000);
+        return false;
+    }
+    
+    return false;
 }
 
 int menuControl() {
@@ -410,19 +491,6 @@ int quickMenuHandling(bool* fmenu, bool eq=true) {
     return 0;
 }
 
-void resetStats() {
-
-    clear();
-    cout << endl;
-    setCenter(22); cout << "Usuwam zawarto˜† z ekwipunku.." << endl;
-    this_thread::sleep_for(1s);
-
-    ofstream eq;
-    eq.open("./resources/eqlist", ios::trunc);
-    eq.close();
-
-}
-
 void changeWindowSize(){
 
     static int size{};
@@ -436,7 +504,8 @@ void changeWindowSize(){
         clear();
 
         setColor(cMenu);
-        writeFromFile("./resources/res");
+        cout<<"\n";
+        setCenter(23); cout<<"Wybierz wielko˜† okna\n\n";
         setColor(cText);
 
         coutMenu(menuS, 2, sel);
@@ -545,41 +614,6 @@ void changeWindowSize(){
                 }
             }
         }
-    }
-
-}
-
-void startHandling(int* selected, bool* fmenu, bool* fstart) {
-
-    int key = _getch();
-
-    switch (key) {
-    case 72: // do gory
-        if (*selected > 0) {
-            (*selected)--;
-        }
-        break;
-    case 80: // w dol
-        if (*selected < 3) {
-            (*selected)++;
-        }
-        break;
-    case 13: // enter
-        if (*selected == 0) {
-            *fmenu = true;
-        }
-        if (*selected == 1) {
-            resetStats();
-        }
-        if (*selected == 2) {
-            changeWindowSize();
-        }
-        if (*selected == 3) {
-            *fstart = false;
-        }
-        break;
-    default:
-        break;
     }
 
 }
