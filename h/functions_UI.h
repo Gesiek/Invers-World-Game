@@ -135,6 +135,7 @@ void goFullscreen() {
     SendMessage(GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 }
 
+/*ALT+ENTER ;)*/
 void fullScreen(){
     //SetConsoleDisplayMode(getHandle(), CONSOLE_FULLSCREEN_MODE, 0);
     //ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
@@ -210,6 +211,7 @@ void clear() {
     system("cls");
 }
 
+/*tablica opcji w menu; ilo˜† opcji; kt¢ra wybrana (od 0); od kt¢rej wy˜wietla†*/
 void coutMenu(string tab[], int n, int which_one, int from = 0) {
 
     for (int i = from; i < n; i++) {
@@ -233,7 +235,7 @@ void coutMenuDesc(int access_level) {
 
     switch (access_level) {
     case 0:
-        writeFromFile("./resources/access0");
+        writeFromFile("./resources/starting_desc");
         break;
     case 1:
         writeFromFile("./resources/access1");
@@ -360,7 +362,7 @@ void fillEq(){
 
         fstream eq_all;
 
-        eq_all.open("./resources/all_eqs");
+        eq_all.open("./resources/admin/all_eqs");
 
         if (eq_all.is_open()) { 
 
@@ -468,6 +470,7 @@ int menuHandling(int* selected, int first, int last, bool* fmenu, bool eq = true
     return 0;
 }
 
+/*ENTER & ESC & EQ (bool outflag)*/
 int quickMenuHandling(bool* fmenu, bool eq=true) {
 
     int key = _getch();

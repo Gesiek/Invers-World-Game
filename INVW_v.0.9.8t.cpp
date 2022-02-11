@@ -1,22 +1,10 @@
+//biblioteki systemowe
 #include "./h/header.h"
 
 using namespace std;
 
-//przypisanie nazw do warto˜ci liczbowych kolor¢w w tablicy
-int cMenu = 1;
-int cText = 2;
-int cExit = 3;
-int cYes = 4;
-int cNo = 5;
-int cZiem = 6;
-int cTraw = 7;
-int cWoda = 8;
-
-int access_level = 0;
-//int access_level = 4; //skr¢t do odblokowania ostatniego etapu gry //0-4
-
-string napis = "*tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk j p zynjsovxot uweje zs©dxk˜mso bntdwmirn*";
-//zaszyfrowana wiadomo˜†
+//zmienne globalne
+#include "./h/globals.h"
 
 #include "./h/functions_misc.h"
 #include "./h/functions_UI.h"
@@ -24,16 +12,17 @@ string napis = "*tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk 
 
 int main() {
     
-    //okre˜lenie poziomu 'wiedzy'/progresu gry
+    //ustawienie aktualnego poziomu 'wiedzy'/progresu gry (z pliku)
     access_level = getAccessLvl();
+    bridge_access = getBridgeAccess();
 
     //tytuˆ okna
     SetConsoleTitleA("Invers World the Game :: koäcowa faza test¢w");
 
-    fullScreen(); //wˆ¥czenie trybu peˆnoekranowego przy uruchomieniu
-    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
-    //setWindow(190, 50, false);
-    //moveWindowTo(0, 0, true);
+//    fullScreen(); //wˆ¥czenie trybu peˆnoekranowego przy uruchomieniu
+//    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+    setWindow(190, 45, false);
+    moveWindowTo(0, 0, true);
     //ShowWindow(GetConsoleWindow(), SW_NORMAL);
     //goFullscreen();
     //showInfos();
@@ -63,7 +52,7 @@ int main() {
     int enter{}; //czy wcisniety enter
 
     //tablica z opcjami odpowiedniego menu
-    string start[5] = { "Rozpocznij gr©", "Wyczy˜† progres", "Zmieä wieko˜† okna", "*Admin tools*", "Wyjd«" };
+    string start[5] = { "Rozpocznij gr©", "Wyczy˜† progres", "Zmieä wieko˜† okna", "*admin_tool*", "Wyjd«" };
     string menu[5] = { "Dziwny pok¢j", "Drzwi", "Jezioro", "Plac Gˆ¢wny", "???" };
 
     while (fstart) {
@@ -75,7 +64,7 @@ int main() {
         setColor(cMenu);
         setCenter(21); cout << "Witaj w Invers World!\n";
         setCenter(26); cout << "czyli przygodowej zagadce\n\n";
-        setCenter(40); cout << "Czy jeste˜ got¢w stawi† czoˆa wyzwaniom?\n\n\n";
+        setCenter(45); cout << "Czy jeste˜ got¢w stawi† czoˆa wyzwaniom?\n\n\n";
         setColor(cText);
 
         //wy˜wietlenie startMenu

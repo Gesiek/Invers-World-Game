@@ -10,8 +10,9 @@ HANDLE getHandle() {
 
 void showInfos() {
     cout << __cplusplus << endl;
-    cout << "Press Enter" << endl;
-    cin.get();
+    cout << __FILE__ << endl;
+    cout << __DATE__ << endl;
+    system("pause");
 }
 
 void setCursorPosition(int x, int y) {
@@ -92,14 +93,14 @@ void setColorsTable() {
     consoleScreenBufferInfoex.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
     GetConsoleScreenBufferInfoEx(getHandle(), &consoleScreenBufferInfoex);
 
-    consoleScreenBufferInfoex.ColorTable[1] = RGB(255, 255, 100); // 1 - menus desc
+    consoleScreenBufferInfoex.ColorTable[1] = RGB(255, 255, 115); // 1 - menus desc
     consoleScreenBufferInfoex.ColorTable[2] = RGB(255, 255, 255); // 2 - text
     consoleScreenBufferInfoex.ColorTable[3] = RGB(255, 255, 50);  // 3 - exit info
     consoleScreenBufferInfoex.ColorTable[4] = RGB(80, 255, 50);   // 4 - yes!
     consoleScreenBufferInfoex.ColorTable[5] = RGB(255, 80, 50);   // 5 - nope!
-    consoleScreenBufferInfoex.ColorTable[6] = RGB(114, 93, 71);   // 6 - ziemia
-    consoleScreenBufferInfoex.ColorTable[7] = RGB(114, 156, 71);  // 7 - trawa
-    consoleScreenBufferInfoex.ColorTable[8] = RGB(114, 156, 225); // 8 - woda
+    consoleScreenBufferInfoex.ColorTable[6] = RGB(114, 60, 40);   // 6 - ziemia
+    consoleScreenBufferInfoex.ColorTable[7] = RGB(114, 200, 71);  // 7 - trawa
+    consoleScreenBufferInfoex.ColorTable[8] = RGB(40, 120, 255); // 8 - woda
     //                                                                 - default text
 
     SetConsoleScreenBufferInfoEx(getHandle(), &consoleScreenBufferInfoex);

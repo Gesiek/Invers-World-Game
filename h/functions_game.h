@@ -1,76 +1,179 @@
 #pragma once
 
-int getAccessLvl(){
-    
+int getAccessLvl() {
+
     ifstream acc; //odczyt
     int x{};
 
-    acc.open("./resources/curr_access");
+    acc.open("./resources/current_access");
 
-    if (acc.is_open()) { //je˜li ok to odczytuje
+    bool notcorupted{};
 
-        acc>>x;
-        cout<<"current access: "<<x<<endl;
-        pause();
-        acc.close();
-    
-        return x;
+    if (acc.is_open()) { //je˜li jest to sprawdza
+
+        //int p = acc.tellg();
+        //acc.seekg(0, ios::end);
+        //int k = acc.tellg();
+        //cout<<p<<" - "<<k<<endl;
+
+        acc.seekg(0, ios::beg);
+
+        int fsize{};
+        fsize = filesystem::file_size("./resources/current_access");
+        cout<<"size pliku: "<<fsize<<endl;
+
+        if(fsize == 6){
+            notcorupted = true;
+        }
+
+        if(notcorupted){
+
+            acc >> x;
+            cout << "current access: " << x << endl;
+            
+            acc.close();
+
+            return x;
+        }
     }
-    else{ //jak nie ma to tworzy i wpisuje
+
+    //cout<<boolalpha<<notcorupted<<endl;
+    //cout<<boolalpha<<acc.is_open()<<endl;
+
+    //jak nie ma albo jest popsuty to tworzy na nowo
+    cout << "Not exist or corrupted - *current_access*. Cleanin'/Creatin'.." << endl;
+
+    ofstream create_acc; //zapis / utworzenie
+    create_acc.open("./resources/current_access", ios::trunc);
+    create_acc << 0 << "\n"; //access level
+    create_acc << 0 << "\n"; //bridge access
+    create_acc.close();
+
+    return 0;
+}
+
+int getBridgeAccess() {
+
+    ifstream acc; //odczyt
+    int x{};
+
+    acc.open("./resources/current_access");
+
+    bool notcorupted = true;
+
+    if (acc.is_open()) { //je˜li jest ok to odczytuje
+
+        //ustawienie wskaznika na drugi znak w pliku
+        acc.seekg(1, ios::beg);
+
+        if(notcorupted){
+
+            acc >> x;
+            cout << "current b_access: " << x << endl;
+            
+            acc.close();
+
+            return x;
+        }
+        else{
+
+        }
+    }
+    else { //nie ma
+
+        cout << "Brak pliku *current_access*" << endl;
         
-        cout<<"Brak pliku *curr_access*. Tworz©.."<<endl;
-        pause();
-
-        ofstream create_acc; //zapis
-        create_acc.open("./resources/curr_access");
-        create_acc<<0;
-        create_acc.close();
-
         return 0;
     }
 
     return 0;
 }
 
-void setAccessLevel(int acc_lvl){
-    
-    access_level = acc_lvl;
+/*od 0 do 4*/
+void setAccessLevel(int acc_lvl) {
 
-    ofstream acc; //zapis
+    access_level = acc_lvl; //najpierw przestawienie globalnej
 
-    acc.open("./resources/curr_access");
+    fstream acc; //plik odczyt/zapis
 
-    if (acc.is_open()) { 
+    acc.open("./resources/current_access");
 
-        acc<<acc_lvl;
-        cout<<"Access changed"<<endl;
-        pause();
+    //acc.seekp(0);
+    acc.seekg(0, ios::beg); //na pierszy znak w pliku
 
+    if (acc.is_open()) {
+
+        acc << acc_lvl; //wpisanie do pliku
         acc.close();
-
+        
+        cout << "Access level changed" << endl;
     }
-    else{
-        cout<<"Bˆ¥d otwarcia pliku *curr_access*"<<endl;
-        pause();
+    else {
+        cout << "Bˆ¥d otwarcia pliku *current_access*" << endl;
     }
 
 }
 
-void adminTools(){
+/*od 0 do 3*/
+void setBridgeAccess(int b_lvl) {
+
+    bridge_access = b_lvl; //najpierw przestawienie globalnej
+
+    fstream acc; //plik odczyt/zapis
+
+    acc.open("./resources/current_access");
+
+    //acc.seekp(3); //3 bo: 0-sam_pocz¥tek, 1-\, 2-n, 3-next_linijka (??)
+    acc.seekg(3, ios::beg); //na drugi znak w pliku (jest on w drugiej linijce)
+
+    if (acc.is_open()) {
+
+        acc << b_lvl; //wpisanie do pliku
+        acc.close();
+
+        cout << "Bridge access changed" << endl;
+    }
+    else {
+        cout << "Bˆ¥d otwarcia pliku *current_access*" << endl;
+    }
+
+}
+
+void adminTools() {
     
-    clear();
+    int enter{};
+    bool outflag = true;
+    string menuA[] = {"add_all"};
 
-    cout<<"\n";
-    setAccessLevel(4);
-    cout<<"\n";
-    fillEq();
-    cout<<"\n\n\n";
-    setCenter(16); cout<<"All Access Added"<<endl;
-    cout<<"\n";
-    setCenter(19); cout<<"All Equipment Added"<<endl;
+    while(outflag){
+        
+        clear();
 
-    coutAnyExitInfo();
-    pauze();
+        cout<<endl;
+        setCenter(15); cout<<"ACCESS LEVEL: "<<access_level<<endl;
+        setCenter(23); cout<<"BRIDGE ACCESS LEVEL : "<<bridge_access<<endl;
+        cout<<endl;
+
+        coutMenu(menuA, 1, 0);
+        coutEscExitInfo();
+
+        enter = quickMenuHandling(&outflag, true);
+        
+        if(enter == 1){
+            cout << "\n";
+            setAccessLevel(4);
+            cout << "\n";
+            setBridgeAccess(3);
+            cout << "\n";
+            fillEq();
+            cout << "\n\n\n";
+            setCenter(16); cout << "All Accesses Added" << endl;
+            cout << "\n";
+            setCenter(19); cout << "All Equipment Added" << endl;
+        }
+
+    }
+    
 }
 
 void resetProgres() {
@@ -81,10 +184,12 @@ void resetProgres() {
 
     setAccessLevel(0);
 
-    setCenter(17); cout<<"Progres usuni©ty";
+    setBridgeAccess(0);
+
+    setCenter(17); cout << "Progres usuni©ty";
 
     this_thread::sleep_for(1s);
-    
+
     coutAnyExitInfo();
     pauze();
 }
@@ -254,7 +359,7 @@ int intInput(int inputLine, bool poziomX, int wod, int wdo) {
         while (!(cin >> a)) {
 
             hideCursor();
-            cout<<"\n";
+            cout << "\n";
             setCenter(23);
             cout << "Nosz pisz jak czˆowiek" << endl;
 
@@ -289,7 +394,7 @@ int intInput(int inputLine, bool poziomX, int wod, int wdo) {
         }
         else {
             hideCursor();
-            cout<<"\n";
+            cout << "\n";
             setCenter(40);
             cout << "Takiej wsp¢ˆrz©dnej przecie¾ nie ma!" << endl;
             Sleep(1000);
@@ -316,9 +421,9 @@ bool showPicture(string nazwa, int wspLitX, int wspLitY, int maxX, int maxY) {
     int yy{};
     int x{}, y{};
 
-    cout<<"\n";
+    cout << "\n";
     yy = printImage(nazwa);
-    cout<<"\n";
+    cout << "\n";
 
     yy = yy + 2;
 
@@ -336,7 +441,7 @@ bool showPicture(string nazwa, int wspLitX, int wspLitY, int maxX, int maxY) {
 
         if (x == wspLitX && y == wspLitY) {
             setColor(cYes);
-            cout<<"\n";
+            cout << "\n";
             setCenter(4); cout << "Tak!" << endl;
             setCenter(31); cout << "*zapisano do listy w ekwipunku*" << endl;
             hideCursor();
@@ -346,7 +451,7 @@ bool showPicture(string nazwa, int wspLitX, int wspLitY, int maxX, int maxY) {
         }
         else {
             setColor(cNo);
-            cout<<"\n";
+            cout << "\n";
             setCenter(4);
             cout << "Nope";
             hideCursor();
@@ -367,12 +472,12 @@ void level1(bool* outflag, int* selected) {
     string menuL1[3] = {"Sprawd« pierwszy", "Sprawd« drugi", "Sprawd« trzeci"};
     static bool o1{}, o2{}, o3{};
 
-    while(*outflag){
+    while (*outflag) {
 
         clear();
 
         setColor(cMenu);
-        writeFromFile("./resources/l1desc");
+        writeFromFile("./resources/1/l1desc");
         setColor(cText);
 
         coutMenu(menuL1, 3, *selected);
@@ -408,8 +513,8 @@ void level1(bool* outflag, int* selected) {
                     }
                 }
             }
-            if(o1 && o2 && o3){
-                if(access_level == 0) {
+            if (o1 && o2 && o3) {
+                if (access_level == 0) {
                     setAccessLevel(1);
                 }
             }
@@ -418,7 +523,7 @@ void level1(bool* outflag, int* selected) {
 
 }
 
-bool checkTime(){
+bool checkTime() {
 
     time_t now = time(0);
     tm ltime;
@@ -432,15 +537,15 @@ bool checkTime(){
 
     //uˆatwienie (..1, 14..)
     //if(((ltime.tm_min) % 3 == 0) && ((sec % 15 == 0) || (sec % 15 == 1) || (sec % 15 == 14))){
-    if(((ltime.tm_min) % 3 == 0) && ((sec % 15 == 0))){
+    if (((ltime.tm_min) % 3 == 0) && ((sec % 15 == 0))) {
         return true;
     }
-    else{
+    else {
         return false;
     }
 }
 
-bool checkLetter(char l, string x, string y){
+bool checkLetter(char l, string x, string y) {
 
     int linia = getCursorPosition().Y;
 
@@ -451,39 +556,39 @@ bool checkLetter(char l, string x, string y){
 
     hideCursor();
     setColor(cMenu);
-    setCenter(6); cout<<str<<endl;
+    setCenter(6); cout << str << endl;
     setColor(cText);
     showCursor();
-    cout<<endl;
-    setCenter(4); cout<<"x: "; cin>>xp;
-    setCenter(4); cout<<"y: "; cin>>yp;
+    cout << endl;
+    setCenter(4); cout << "x: "; cin >> xp;
+    setCenter(4); cout << "y: "; cin >> yp;
     hideCursor();
 
-    if((x == xp) && (y == yp)){
-        cout<<endl;
-        setColor(cYes); setCenter(7); cout<<"Dobrze"<<endl; setColor(cText);
+    if ((x == xp) && (y == yp)) {
+        cout << endl;
+        setColor(cYes); setCenter(7); cout << "Dobrze" << endl; setColor(cText);
         Sleep(1000);
-        if(l != 'X') clearLines(linia);
+        if (l != 'X') clearLines(linia);
         return true;
     }
-    else{
-        cout<<endl;
-        setColor(cNo); setCenter(17); cout<<"Niet, niestety nie"<<endl; setColor(cText);
+    else {
+        cout << endl;
+        setColor(cNo); setCenter(17); cout << "Niet, niestety nie" << endl; setColor(cText);
         Sleep(1000);
         hideCursor();
-        if(l != 'X') clearLines(linia);
+        if (l != 'X') clearLines(linia);
         return false;
     }
 }
 
-void mysliwy(bool* flag){
+void mysliwy(bool* flag) {
 
     int enter{};
     int sel{};
     static int know_level = 1;
     string menuM[] = {"Eee, co?", "1.", "2.", "3.", "4.", "Zapytaj o nagrod©"};
 
-    if(know_level == 7){
+    if (know_level == 7) {
         //przeszedni©te
         *flag = false;
         return;
@@ -497,60 +602,60 @@ void mysliwy(bool* flag){
     coutAnyExitInfo();
     pauze();
 
-    if(know_level != 1){
+    if (know_level != 1) {
         sel = 1;
     }
 
-    while(*flag){
+    while (*flag) {
 
         clear();
 
         setColor(cMenu);
         switch (know_level) {
-            case 1:
-                writeFromFile("./resources/2/m0");
-                break;
-            case 2:
-                writeFromFile("./resources/2/m1");
-                break;
-            case 3:
-                writeFromFile("./resources/2/m1");
-                break;
-            case 4:
-                writeFromFile("./resources/2/m1");
-                break;
-            case 5:
-                writeFromFile("./resources/2/m1");
-                break;
-            case 6:
-                writeFromFile("./resources/2/m6");
-                break;
-            default:
-                break;
+        case 1:
+            writeFromFile("./resources/2/m0");
+            break;
+        case 2:
+            writeFromFile("./resources/2/m1");
+            break;
+        case 3:
+            writeFromFile("./resources/2/m1");
+            break;
+        case 4:
+            writeFromFile("./resources/2/m1");
+            break;
+        case 5:
+            writeFromFile("./resources/2/m1");
+            break;
+        case 6:
+            writeFromFile("./resources/2/m6");
+            break;
+        default:
+            break;
         }
         setColor(cText);
 
-        cout<<endl;
+        cout << endl;
 
-        if(know_level == 1) {
+        if (know_level == 1) {
             coutMenu(menuM, know_level, sel);
         }
-        else{
+        else {
             coutMenu(menuM, know_level, sel, 1);
         }
-        
+
         int linia = getCursorPosition().Y;
         coutEscExitInfo(false);
 
-        if(know_level == 1) {
-            enter = menuHandling(&sel, 0, know_level-1, flag, false);
+        if (know_level == 1) {
+            enter = menuHandling(&sel, 0, know_level - 1, flag, false);
         }
-        else{
-            enter = menuHandling(&sel, 1, know_level-1, flag, false);
+        else {
+            enter = menuHandling(&sel, 1, know_level - 1, flag, false);
         }
 
         if (enter == 1) {
-            if((sel != 0) && (know_level >= 1)){
+            if ((sel != 0) && (know_level >= 1)) {
                 //wy˜wietlenie tu ekwipunku (dla pytaä)
                 clearLines(linia);
                 cout << "\n\n";
@@ -563,21 +668,21 @@ void mysliwy(bool* flag){
                 setColor(cText);
             }
             if (sel == 0) {
-                if(know_level == 1){
+                if (know_level == 1) {
                     clearLines(linia);
                     hideCursor();
-                    cout<<"\n\n";
+                    cout << "\n\n";
                     Sleep(700);
                     setColor(cMenu);
-                    setCenter(53); cout<<"- Ah! Ju¾ zapomniaˆem ¾e wy nie m¢wicie w Invj©zyku.\n\n";
+                    setCenter(53); cout << "- Ah! Ju¾ zapomniaˆem ¾e wy nie m¢wicie w Invj©zyku.\n\n";
                     Sleep(1900);
-                    setCenter(37); cout<<"- Dawno nie byˆo tu ¾adnego czˆowieka.\n\n";
+                    setCenter(37); cout << "- Dawno nie byˆo tu ¾adnego czˆowieka.\n\n";
                     Sleep(2200);
-                    setCenter(41); cout<<"- Oto¾, widz©, ¾e masz ju¾ jak¥˜ wiedz©.\n\n";
+                    setCenter(41); cout << "- Oto¾, widz©, ¾e masz ju¾ jak¥˜ wiedz©.\n\n";
                     Sleep(1800);
-                    setCenter(23); cout<<"- Mam ja co˜ dla Ciebie..\n\n";
+                    setCenter(23); cout << "- Mam ja co˜ dla Ciebie..\n\n";
                     Sleep(1200);
-                    setCenter(46); cout<<"- Ale najpierw, musz© si© upewni† co ju¾ wiesz..\n\n\n";
+                    setCenter(46); cout << "- Ale najpierw, musz© si© upewni† co ju¾ wiesz..\n\n\n";
                     Sleep(1000);
                     setColor(cText);
                     coutAnyExitInfo();
@@ -587,16 +692,16 @@ void mysliwy(bool* flag){
                     clear();
                 }
             }
-            else if(sel == 1){
-                cout<<"\n";
+            else if (sel == 1) {
+                cout << "\n";
                 setColor(cMenu);
-                setCenter(53); cout<<"- Podam Ci liter©, a Ty je˜li znasz, podasz mi dwie liczby\n\n";
+                setCenter(53); cout << "- Podam Ci liter©, a Ty je˜li znasz, podasz mi dwie liczby\n\n";
 
-                if((checkLetter('L', "2", "4")) && (checkLetter('B', "10", "3")) && (checkLetter('X', "10", "9"))){
+                if ((checkLetter('L', "2", "4")) && (checkLetter('B', "10", "3")) && (checkLetter('X', "10", "9"))) {
                     //good
                     know_level = 3;
                 }
-                else{
+                else {
                     //nope
                 }
 
@@ -606,25 +711,25 @@ void mysliwy(bool* flag){
                 pauze();
                 clear();
             }
-            else if(sel == 2){
-                cout<<"\n";
+            else if (sel == 2) {
+                cout << "\n";
                 setColor(cMenu);
-                setCenter(72); cout<<"- A teraz inne pytanie, po ile maj¥ Korzeä Nirnu w sklepie na Gˆ¢wnej?\n\n";
-                
+                setCenter(72); cout << "- A teraz inne pytanie, po ile maj¥ Korzeä Nirnu w sklepie na Gˆ¢wnej?\n\n";
+
                 string cena{};
                 showCursor();
-                cout<<endl;
-                setColor(cText); setCenter(24); cout<<"podaj warto˜†: "; cin>>cena;
+                cout << endl;
+                setColor(cText); setCenter(24); cout << "podaj warto˜†: "; cin >> cena;
 
-                if(cena == "23.55" || cena == "23,55"){
+                if (cena == "23.55" || cena == "23,55") {
                     //good
-                    cout<<endl;
-                    setColor(cYes); setCenter(7); cout<<"Dobrze"<<endl; setColor(cText);
+                    cout << endl;
+                    setColor(cYes); setCenter(7); cout << "Dobrze" << endl; setColor(cText);
                     know_level = 4;
                 }
-                else{
-                    cout<<endl;
-                    setColor(cNo); setCenter(16); cout<<"Niet, nie tyle"<<endl; setColor(cText);
+                else {
+                    cout << endl;
+                    setColor(cNo); setCenter(16); cout << "Niet, nie tyle" << endl; setColor(cText);
                     //nope
                 }
 
@@ -634,28 +739,28 @@ void mysliwy(bool* flag){
                 pauze();
                 clear();
             }
-            else if(sel == 3){
-                cout<<"\n";
+            else if (sel == 3) {
+                cout << "\n";
                 setColor(cMenu);
-                setCenter(48); cout<<"- Znasz czterocyfrowy kod karczmy 'Pod Rudym Kotem'?\n\n";
-                
+                setCenter(48); cout << "- Znasz czterocyfrowy kod karczmy 'Pod Rudym Kotem'?\n\n";
+
                 string kot{};
                 showCursor();
-                cout<<endl;
-                setColor(cText); setCenter(14); cout<<"wpisz kod: "; cin>>kot;
+                cout << endl;
+                setColor(cText); setCenter(14); cout << "wpisz kod: "; cin >> kot;
 
-                if(kot == "3451"){
+                if (kot == "3451") {
                     //good
-                    cout<<endl;
-                    setColor(cYes); setCenter(7); cout<<"Zgadza si©"<<endl; setColor(cText);
+                    cout << endl;
+                    setColor(cYes); setCenter(7); cout << "Zgadza si©" << endl; setColor(cText);
                     know_level = 5;
                 }
-                else{
-                    cout<<endl;
-                    setColor(cNo); setCenter(35); cout<<"Nie, nie zgadza si©, chyba musisz jeszcze poszuka†"<<endl; setColor(cText);
+                else {
+                    cout << endl;
+                    setColor(cNo); setCenter(35); cout << "Nie, nie zgadza si©, chyba musisz jeszcze poszuka†" << endl; setColor(cText);
                     //nope
                 }
-                
+
 
                 setColor(cText);
                 hideCursor();
@@ -663,25 +768,25 @@ void mysliwy(bool* flag){
                 pauze();
                 clear();
             }
-            else if(sel == 4){
-                cout<<"\n";
+            else if (sel == 4) {
+                cout << "\n";
                 setColor(cMenu);
-                setCenter(72); cout<<"- To ostatnie pytanie. Profilaktyczne. Jaki kolor miaˆa skrzynka na wyspie??\n\n";
-                
+                setCenter(72); cout << "- To ostatnie pytanie. Profilaktyczne. Jaki kolor miaˆa skrzynka na wyspie??\n\n";
+
                 string kolor{};
                 showCursor();
-                cout<<endl;
-                setColor(cText); setCenter(18); cout<<"wpisz kolor: "; cin>>kolor;
+                cout << endl;
+                setColor(cText); setCenter(18); cout << "wpisz kolor: "; cin >> kolor;
 
-                if((kolor == "zielony") || (kolor == "zielona") || (kolor == "zieleä") || (kolor == "zielen")){
+                if ((kolor == "zielony") || (kolor == "zielona") || (kolor == "zieleä") || (kolor == "zielen" )){
                     //good
-                    cout<<endl;
-                    setColor(cYes); setCenter(5); cout<<"Tak.."<<endl; setColor(cText);
+                    cout << endl;
+                    setColor(cYes); setCenter(5); cout << "Tak.." << endl; setColor(cText);
                     know_level = 6;
                 }
-                else{
-                    cout<<endl;
-                    setColor(cNo); setCenter(18); cout<<"Ee, nie, nie, nie"<<endl; setColor(cText);
+                else {
+                    cout << endl;
+                    setColor(cNo); setCenter(18); cout << "Ee, nie, nie, nie" << endl; setColor(cText);
                     //nope
                 }
 
@@ -691,28 +796,28 @@ void mysliwy(bool* flag){
                 pauze();
                 clear();
             }
-            else if(sel == 5){
+            else if (sel == 5) {
                 //know_level == 6
                 clear();
                 hideCursor();
 
-                cout<<"\n\n";
+                cout << "\n\n";
                 Sleep(700);
                 setColor(cMenu);
-                setCenter(10); cout<<"- Ah, tak..\n\n";
+                setCenter(10); cout << "- Ah, tak..\n\n";
                 Sleep(1000);
-                setCenter(14); cout<<"- Chwileczk©..\n\n";
+                setCenter(14); cout << "- Chwileczk©..\n\n";
                 Sleep(3000);
-                setCenter(18); cout<<"- Ot¢¾, powiem tak.\n\n";
+                setCenter(18); cout << "- Ot¢¾, powiem tak.\n\n";
                 Sleep(1500);
-                setCenter(66); cout<<"- Albo masz kupe szcz©˜cia, albo naprawd© na niego zasˆu¾yˆe˜..\n\n\n\n";
+                setCenter(66); cout << "- Albo masz kupe szcz©˜cia, albo naprawd© na niego zasˆu¾yˆe˜..\n\n\n\n";
                 Sleep(2100);
                 setColor(cText);
-                setCenter(25); cout<<"*podaje Ci pewien przedmiot*\n\n\n";
+                setCenter(25); cout << "*podaje Ci pewien przedmiot*\n\n\n";
                 Sleep(1500);
 
                 writeFromFile("./resources/2/przedmiot");
-                if(access_level <= 3) {
+                if (access_level <= 3) {
                     setAccessLevel(4);
                 }
                 printToEq("nagroda my˜liwego - Zˆoty Szpon");
@@ -725,8 +830,8 @@ void mysliwy(bool* flag){
                 clearLines(linia);
                 hideCursor();
 
-                cout<<"\n\n";
-                setCenter(57); cout<<"Nim jednak zd¥¾ysz co˜ powiedzie† drzwi zamykaj¥ si©\n\n\n";
+                cout << "\n\n";
+                setCenter(57); cout << "Nim jednak zd¥¾ysz co˜ powiedzie† drzwi zamykaj¥ si©\n\n\n";
 
                 Sleep(1000);
 
@@ -739,9 +844,9 @@ void mysliwy(bool* flag){
                 break;
 
             }
-            
+
         }
-        
+
 
     }
 
@@ -753,12 +858,12 @@ void level2(bool* outflag, int* selected) {
     int enter{};
     string menuL2[3] = {"Zapukaj", "Spr¢buj otworzy†", "U¾yj du¾o siˆy"};
 
-    while(*outflag){
+    while (*outflag) {
 
         clear();
 
         setColor(cMenu);
-        writeFromFile("./resources/l2desc");
+        writeFromFile("./resources/2/l2desc");
         setColor(cText);
         coutMenu(menuL2, 3, *selected);
         coutEscExitInfo();
@@ -767,11 +872,11 @@ void level2(bool* outflag, int* selected) {
         if (enter == 1) {
             if (*selected == 0) {
                 clear();
-                if(checkTime()){
+                if (checkTime()) {
                     bool flag = true;
                     mysliwy(&flag);
                 }
-                else{
+                else {
                     writeFromFile("./resources/2/d1");
                     coutAnyExitInfo();
                     _getch();
@@ -878,7 +983,7 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
                     this_thread::sleep_for(1500ms);
                     setColor(cText);
 
-                    cout<<"\n\n\n\n\n\n\n\n";
+                    cout << "\n\n\n\n\n\n\n\n";
                     coutAnyExitInfo();
                     pauze();
 
@@ -918,7 +1023,7 @@ bool bridgeBuild(int which_field, int length, int speed = 250) {
         setCursorPosition(0, (linia + (length / 2)) - 1);
         setCenter(7); cout << "Dobrze!" << endl;
         this_thread::sleep_for(1000ms);
-        cout<<"\n\n\n\n\n\n\n\n";
+        cout << "\n\n\n\n\n\n\n\n";
         coutAnyExitInfo();
         pauze();
         setColor(cText);
@@ -953,7 +1058,7 @@ void wyspa(bool* flag) {
         writeFromFile("./resources/3/wyspa");
         setColor(cText);
 
-        if(!kartka){
+        if (!kartka) {
             printToEq("br¥zowe futro");
             printToEq("kilka niebieskich kamyk¢w");
         }
@@ -968,16 +1073,16 @@ void wyspa(bool* flag) {
             clear();
             writeFromFile("./resources/3/skrzynka");
             setColor(cYes);
-            setCenter(108); cout<<napis<<"\n\n";
+            setCenter(108); cout << napis << "\n\n";
             setColor(cText);
-            if(!kartka){
+            if (!kartka) {
                 kartka = true;
                 printToEq("17 zˆotych monet");
                 printToEq("zaszyfrowana karteczka ze skrzynki na wyspie:\n" + napis + "\n");
             }
             coutAnyExitInfo();
             pauze();
-            if(access_level <= 1) {
+            if (access_level <= 1) {
                 setAccessLevel(2);
             }
         }
@@ -993,22 +1098,27 @@ void wyspa(bool* flag) {
 void level3(bool* outflag, int* selected) {
 
     int enter{};
-    static int bridge_access = 1;
+
+    if (access_level >= 2) {
+        bridge_access = 3; //je˜li przeszedˆe˜ ju¾ mosty to nie musisz ich drugi raz budowa†
+    }
+
     static bool fHelp = true;
     bool fwyspa{};
     string menuL3[4] = {"Spr¢buj wybudowa† pierwszy most", "Spr¢buj wybudowa† drugi most", "Spr¢buj wybudowa† trzeci most", "Sprawd« co znajduje si© na wyspie"};
-    
-    while(*outflag){
+
+    while (*outflag) {
 
         clear();
 
         setColor(cMenu);
-        writeFromFile("./resources/l3desc");
+        writeFromFile("./resources/3/l3desc");
         setColor(cText);
-        coutMenu(menuL3, bridge_access, *selected);
+
+        coutMenu(menuL3, bridge_access + 1, *selected);
         coutEscExitInfo();
 
-        enter = menuHandling(selected, 0, bridge_access - 1, outflag);
+        enter = menuHandling(selected, 0, bridge_access, outflag);
 
         if (enter == 1) {
             if (*selected == 0) {
@@ -1016,32 +1126,40 @@ void level3(bool* outflag, int* selected) {
                 if (fHelp) {
                     coutBridgeHelp(&fHelp);
                 }
-                if (bridgeBuild(4, 5, 350)) {
-                    if (bridge_access == 1) {
-                        bridge_access = 2;
+                if (bridge_access == 0) {
+                    if (bridgeBuild(4, 5, 350)) {
+                        setBridgeAccess(1);
                     }
                 }
+                else{
+                    cout << "\n";
+                    setCenter(15); cout << "Ju¾ zbudowany!\n\n";
+                    coutAnyExitInfo();
+                    pauze();
+                }
             }
-            if (*selected == 1) {
+            if (*selected == 1) { //tutaj jeszcze to pozmieniac
                 clear();
                 if (bridgeBuild(7, 8, 250)) {
-                    if (bridge_access == 2) {
-                        bridge_access = 3;
+                    if (bridge_access == 1) {
+                        bridge_access = 2;
                     }
                 }
             }
             if (*selected == 2) {
                 clear();
                 if (bridgeBuild(5, 10, 200)) {
-                    if (bridge_access == 3) {
-                        bridge_access = 4;
+                    if (bridge_access == 2) {
+                        bridge_access = 3;
                     }
                 }
             }
             if (*selected == 3) {
-                clear();
-                fwyspa = true;
-                wyspa(&fwyspa);
+                if(bridge_access == 3){
+                    clear();
+                    fwyspa = true;
+                    wyspa(&fwyspa);
+                }
             }
         }
     }
@@ -1084,8 +1202,8 @@ void maszyna(bool* mflag) {
 
         cout << endl;
         setCenter(txt.length());
-        if(deszyfrLin(txt) == deszyfrLin(napis)){
-            if(access_level <= 2) {
+        if (deszyfrLin(txt) == deszyfrLin(napis)) {
+            if (access_level <= 2) {
                 setAccessLevel(3);
             }
         }
@@ -1127,57 +1245,57 @@ void biblioteka(bool* bflag) {
 
 }
 
-void karteczka(){
+void karteczka() {
 
     static bool kot{};
 
-    if(!kot){
+    if (!kot) {
         setColor(cText);
         Sleep(1000);
-        setCenter(10); cout<<"Ale nagle..\n\n";
+        setCenter(10); cout << "Ale nagle..\n\n";
         Sleep(1000);
-        setCenter(42); cout<<"Maˆy elf podaje Ci zwini©t¥ karteczk©..\n\n\n\n";
+        setCenter(42); cout << "Maˆy elf podaje Ci zwini©t¥ karteczk©..\n\n\n\n";
         Sleep(1500);
-        setCenter(10); cout<<"Zobacz <-\n\n";
+        setCenter(10); cout << "Zobacz <-\n\n";
 
         int key{};
         int linia = getCursorPosition().Y;
         coutEscExitInfo(false);
 
-        while(1){
+        while (1) {
             key = _getch();
-            if(key == 13) break;
-            if(key == 27) break;
+            if (key == 13) break;
+            if (key == 27) break;
         }
 
-        if(key == 13){
+        if (key == 13) {
             system("start notepad.exe");
             Sleep(100);
             writeFromKeys("'POD RUDYM KOT3M' M4JA NAJLEP5ZA POTRAWKE Z DZ1KA");
             //3451
 
-            kot=true;
+            kot = true;
             Sleep(1000);
-            cout<<"\n\n";
+            cout << "\n\n";
             clearLines(linia);
-            cout<<"\n\n";
+            cout << "\n\n";
             setColor(cYes);
-            setCenter(22); cout<<"*dodaj© do ekwipunku*\n";
+            setCenter(22); cout << "*dodaj© do ekwipunku*\n";
             setColor(cText);
             printToEq("dziwna karteczka od elfa: \"'Pod Rudym Kot3m' m4ja najlep5za potrawke z dz1ka\"");
-            
+
             Sleep(1000);
             coutAnyExitInfo();
             _getch();
         }
-        else{
-            cout<<"\n\n";
-            setCenter(30); cout<<"Odwracasz si© i odchodzisz\n\n";
+        else {
+            cout << "\n\n";
+            setCenter(30); cout << "Odwracasz si© i odchodzisz\n\n";
             Sleep(1000);
         }
     }
-    else{
-        setCenter(25); cout<<"*cicho sobie plumka woda*\n\n";
+    else {
+        setCenter(25); cout << "*cicho sobie plumka woda*\n\n";
         coutAnyExitInfo();
         pauze();
     }
@@ -1191,12 +1309,12 @@ void level4(bool* outflag, int* selected) {
     string menuL4[4] = {"Podejd« do fontanny", "Wejd« do sklepu", "Dopisz nazw© sklepu do listy w ekwipunku", "Wejd« do biblioteki"};
     bool bflag{};
 
-    while(*outflag){
+    while (*outflag) {
 
         clear();
 
         setColor(cMenu);
-        writeFromFile("./resources/l4desc");
+        writeFromFile("./resources/4/l4desc");
         setColor(cText);
         coutMenu(menuL4, 4, *selected);
         coutEscExitInfo();
@@ -1239,14 +1357,14 @@ void level4(bool* outflag, int* selected) {
 
 }
 
-void final(bool* outflag){
+void final(bool* outflag) {
 
     int enter{};
     string menuF[] = {"Spr¢buj wej˜†"};
     bool flag{};
 
-    while(*outflag){
-        
+    while (*outflag) {
+
         clear();
 
         setColor(cMenu);
@@ -1259,12 +1377,12 @@ void final(bool* outflag){
         enter = quickMenuHandling(outflag);
 
         if (enter == 1) {
-            
+
             int sel{};
             string menuD[] = {"Poka¾ 17 zˆotych monet", "Poka¾ br¥zowe futro", "Poka¾ niebieskie kamyki", "Poka¾ Zˆoty Szpon"};
             flag = true;
 
-            while(flag){
+            while (flag) {
 
                 clear();
 
@@ -1273,9 +1391,9 @@ void final(bool* outflag){
                 setColor(cText);
                 int linia = getCursorPosition().Y;
 
-                if((!eqCheck("17")) || (!eqCheck("Szpon")) || (!eqCheck("niebieskich")) || (!eqCheck("futro"))){
-                    setCenter(33); cout<<"O kurcze, chyba co˜ przepiˆem.."<<endl;
-                    setCenter(22); cout<<"Gdzie m¢j ekwipunek?!"<<endl;
+                if ((!eqCheck("17")) || (!eqCheck("Szpon")) || (!eqCheck("niebieskich")) || (!eqCheck("futro"))) {
+                    setCenter(33); cout << "O kurcze, chyba co˜ przepiˆem.." << endl;
+                    setCenter(22); cout << "Gdzie m¢j ekwipunek?!" << endl;
                     flag = false;
                     coutAnyExitInfo();
                     pauze();
@@ -1290,64 +1408,64 @@ void final(bool* outflag){
                 if (enter == 1) {
                     if (sel == 0) {
                         clearLines(linia);
-                        cout<<"\n";
+                        cout << "\n";
                         Sleep(1000);
                         setColor(cMenu);
-                        setCenter(40); cout<<"- Nic mi po nich. Nie potrzebuj© monet."<<endl;
+                        setCenter(40); cout << "- Nic mi po nich. Nie potrzebuj© monet." << endl;
                         setColor(cText);
                         Sleep(1000);
-                        cout<<"\n";
+                        cout << "\n";
                         coutAnyExitInfo();
                         pauze();
                     }
                     if (sel == 1) {
                         clearLines(linia);
-                        cout<<"\n";
+                        cout << "\n";
                         Sleep(1000);
                         setColor(cMenu);
-                        setCenter(29); cout<<"- To nie jest interesuj¥ce.."<<endl;
+                        setCenter(29); cout << "- To nie jest interesuj¥ce.." << endl;
                         setColor(cText);
                         Sleep(1000);
-                        cout<<"\n";
+                        cout << "\n";
                         coutAnyExitInfo();
                         pauze();
                     }
                     if (sel == 2) {
                         clearLines(linia);
-                        cout<<"\n";
+                        cout << "\n";
                         Sleep(1500);
                         setColor(cMenu);
-                        setCenter(34); cout<<"- Hm.. doprawdy, s¥ rzadko˜ci¥."<<endl;
+                        setCenter(34); cout << "- Hm.. doprawdy, s¥ rzadko˜ci¥." << endl;
                         Sleep(1500);
-                        cout<<"\n";
-                        setCenter(28); cout<<"- Jednak nie wystarczaj¥co."<<endl;
+                        cout << "\n";
+                        setCenter(28); cout << "- Jednak nie wystarczaj¥co." << endl;
                         setColor(cText);
                         Sleep(1000);
-                        cout<<"\n";
+                        cout << "\n";
                         coutAnyExitInfo();
                         pauze();
                     }
                     if (sel == 3) {
                         clearLines(linia);
-                        cout<<"\n";
+                        cout << "\n";
                         Sleep(1500);
                         setColor(cMenu);
-                        setCenter(22); cout<<"- Ooo! I to jest co˜!"<<endl;
+                        setCenter(22); cout << "- Ooo! I to jest co˜!" << endl;
                         Sleep(2000);
-                        cout<<"\n";
-                        setCenter(25); cout<<"- Prawdziwy Zˆoty Szpon!"<<endl;
+                        cout << "\n";
+                        setCenter(25); cout << "- Prawdziwy Zˆoty Szpon!" << endl;
                         Sleep(3000);
-                        cout<<"\n";
-                        setCenter(31); cout<<"- Od wiek¢w go poszukiwaˆem!"<<endl;
+                        cout << "\n";
+                        setCenter(31); cout << "- Od wiek¢w go poszukiwaˆem!" << endl;
                         Sleep(2000);
-                        cout<<"\n";
-                        setCenter(14); cout<<"- Dzi©ki Ci."<<endl;
+                        cout << "\n";
+                        setCenter(14); cout << "- Dzi©ki Ci." << endl;
                         Sleep(2000);
-                        cout<<"\n";
-                        setCenter(32); cout<<"- A teraz id«, dobry czˆowieku."<<endl;
+                        cout << "\n";
+                        setCenter(32); cout << "- A teraz id«, dobry czˆowieku." << endl;
                         Sleep(2000);
-                        cout<<"\n";
-                        setCenter(32); cout<<"- Niech niebiosa Ci sprzyjaj¥!"<<endl;
+                        cout << "\n";
+                        setCenter(32); cout << "- Niech niebiosa Ci sprzyjaj¥!" << endl;
                         Sleep(2000);
                         setColor(cText);
 
@@ -1355,24 +1473,24 @@ void final(bool* outflag){
                         clear();
                         Sleep(1000);
 
-                        cout<<"\n\n\n";
+                        cout << "\n\n\n";
                         writeFromFile("./img/land200.txt");
-                        cout<<"\n";
-                        setCenter(8); cout<<"THE END"<<endl;
+                        cout << "\n";
+                        setCenter(8); cout << "THE END" << endl;
 
                         coutAnyExitInfo();
                         pauze();
                         exit(0);
                     }
                 }
-            
+
             }
-            
+
         }
 
     }
-    
 
-    
+
+
 
 }
