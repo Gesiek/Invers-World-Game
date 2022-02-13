@@ -250,9 +250,10 @@ void coutMenuDesc(int access_level) {
         writeFromFile("./resources/access4");
         break;
     default:
-        writeFromFile("./resources/access0");
+        writeFromFile("./resources/access5");
         break;
     }
+
     setColor(cText);
 
 }

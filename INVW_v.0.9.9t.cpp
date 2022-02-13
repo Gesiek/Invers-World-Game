@@ -19,10 +19,10 @@ int main() {
     //tytuˆ okna
     SetConsoleTitleA("Invers World the Game :: koäcowa faza test¢w");
 
-//    fullScreen(); //wˆ¥czenie trybu peˆnoekranowego przy uruchomieniu
-//    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
-    setWindow(190, 45, false);
-    moveWindowTo(0, 0, true);
+    fullScreen(); //wˆ¥czenie trybu peˆnoekranowego przy uruchomieniu
+    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+//    setWindow(150, 45, false);
+//    moveWindowTo(0, 0, true);
     //ShowWindow(GetConsoleWindow(), SW_NORMAL);
     //goFullscreen();
     //showInfos();
@@ -123,8 +123,8 @@ int main() {
                 selected = 3;
             }
             if (ffinal) {
-                //dost©pny tylko gdy access_level == 4
-                if(access_level == 4){
+                //dost©pny tylko od access_level == 4
+                if(access_level >= 4){
                     final(&ffinal);
                 }
                 else{

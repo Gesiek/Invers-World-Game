@@ -20,8 +20,8 @@ int cZiem = 6;
 int cTraw = 7;
 int cWoda = 8;
 
-int access_level = 0; //0-4
-int bridge_access = 0; //0-3
+int access_level = 0; //0-5 //przy =4 mo¾liwe wej˜cie do portalu
+int bridge_access = 0; //0-3 //przy =3 odkrycie wyspy
 
 string napis = "*tf˜spdf szrjw ojijs vadplyh ydqpt x uweje xvdc xwlhqmt¥ sotazk j p zynjsovxot uweje zs©dxk˜mso bntdwmirn*";
 //zaszyfrowana wiadomo˜†

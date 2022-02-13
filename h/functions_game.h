@@ -89,7 +89,7 @@ int getBridgeAccess() {
     return 0;
 }
 
-/*od 0 do 4*/
+/*od 0 do 5*/
 void setAccessLevel(int acc_lvl) {
 
     access_level = acc_lvl; //najpierw przestawienie globalnej
@@ -161,7 +161,7 @@ void adminTools() {
         
         if(enter == 1){
             cout << "\n";
-            setAccessLevel(4);
+            setAccessLevel(5);
             cout << "\n";
             setBridgeAccess(3);
             cout << "\n";
@@ -588,19 +588,15 @@ void mysliwy(bool* flag) {
     static int know_level = 1;
     string menuM[] = {"Eee, co?", "1.", "2.", "3.", "4.", "Zapytaj o nagrod©"};
 
-    if (know_level == 7) {
+    if(access_level >= 4){
+        know_level = 7;
+    }
+
+    /*if (know_level == 7) {
         //przeszedni©te
         *flag = false;
         return;
-    }
-
-    clear();
-
-    writeFromFile("./resources/2/m");
-
-    Sleep(1500);
-    coutAnyExitInfo();
-    pauze();
+    }*/
 
     if (know_level != 1) {
         sel = 1;
@@ -629,6 +625,9 @@ void mysliwy(bool* flag) {
             break;
         case 6:
             writeFromFile("./resources/2/m6");
+            break;
+        case 7:
+            writeFromFile("./resources/2/m7");
             break;
         default:
             break;
@@ -662,7 +661,7 @@ void mysliwy(bool* flag) {
                 setCenter(36);
                 setColor(cMenu);
                 cout << "--------aktualnie w ekwipunku---------\n\n";
-                writeFromFile("./resources/eqlist");
+                writeFromFile("./resources/eq");
                 setCenter(36);
                 cout << "--------------------------------------\n\n";
                 setColor(cText);
@@ -671,6 +670,7 @@ void mysliwy(bool* flag) {
                 if (know_level == 1) {
                     clearLines(linia);
                     hideCursor();
+                    
                     cout << "\n\n";
                     Sleep(700);
                     setColor(cMenu);
@@ -685,10 +685,13 @@ void mysliwy(bool* flag) {
                     setCenter(46); cout << "- Ale najpierw, musz© si© upewni† co ju¾ wiesz..\n\n\n";
                     Sleep(1000);
                     setColor(cText);
-                    coutAnyExitInfo();
-                    pauze();
+                    
+                    setAccessLevel(4);
                     know_level = 2;
                     sel = 1;
+
+                    coutAnyExitInfo();
+                    pauze();
                     clear();
                 }
             }
@@ -786,7 +789,7 @@ void mysliwy(bool* flag) {
                 }
                 else {
                     cout << endl;
-                    setColor(cNo); setCenter(18); cout << "Ee, nie, nie, nie" << endl; setColor(cText);
+                    setColor(cNo); setCenter(18); cout << "Ee, nie, nie, nie.. nie byˆe˜ tam?" << endl; setColor(cText);
                     //nope
                 }
 
@@ -801,47 +804,61 @@ void mysliwy(bool* flag) {
                 clear();
                 hideCursor();
 
-                cout << "\n\n";
-                Sleep(700);
-                setColor(cMenu);
-                setCenter(10); cout << "- Ah, tak..\n\n";
-                Sleep(1000);
-                setCenter(14); cout << "- Chwileczk©..\n\n";
-                Sleep(3000);
-                setCenter(18); cout << "- Ot¢¾, powiem tak.\n\n";
-                Sleep(1500);
-                setCenter(66); cout << "- Albo masz kupe szcz©˜cia, albo naprawd© na niego zasˆu¾yˆe˜..\n\n\n\n";
-                Sleep(2100);
-                setColor(cText);
-                setCenter(25); cout << "*podaje Ci pewien przedmiot*\n\n\n";
-                Sleep(1500);
-
-                writeFromFile("./resources/2/przedmiot");
-                if (access_level <= 3) {
-                    setAccessLevel(4);
+                if(access_level == 5){
+                    cout << "\n\n";
+                    Sleep(400);
+                    setCenter(36); cout << "- Co prawda mam Alzheimera, ale nie a¾ takiego.\n\n";
+                    Sleep(600);
+                    setCenter(32); cout << "- Ju¾ j¥ przecie¾ otrzymaˆe˜.\n\n";
+                    
+                    coutAnyExitInfo();
+                    pauze();
                 }
-                printToEq("nagroda my˜liwego - Zˆoty Szpon");
+                else{
 
-                Sleep(4000);
+                    cout << "\n\n";
+                    Sleep(700);
+                    setColor(cMenu);
+                    setCenter(10); cout << "- Ah, tak..\n\n";
+                    Sleep(1000);
+                    setCenter(14); cout << "- Chwileczk©..\n\n";
+                    Sleep(3000);
+                    setCenter(18); cout << "- Ot¢¾, powiem tak.\n\n";
+                    Sleep(1500);
+                    setCenter(66); cout << "- Albo masz kupe szcz©˜cia, albo naprawd© na niego zasˆu¾yˆe˜..\n\n\n\n";
+                    Sleep(2100);
+                    setColor(cText);
+                    setCenter(25); cout << "*podaje Ci pewien przedmiot*\n\n\n";
+                    Sleep(1500);
 
-                linia = getCursorPosition().Y;
-                coutAnyExitInfo();
-                pauze();
-                clearLines(linia);
-                hideCursor();
+                    writeFromFile("./resources/2/przedmiot");
+                    if (access_level <= 3) {
+                        setAccessLevel(5);
+                    }
+                    know_level = 7;
+                    printToEq("nagroda my˜liwego - Zˆoty Szpon");
 
-                cout << "\n\n";
-                setCenter(57); cout << "Nim jednak zd¥¾ysz co˜ powiedzie† drzwi zamykaj¥ si©\n\n\n";
+                    Sleep(4000);
 
-                Sleep(1000);
+                    linia = getCursorPosition().Y;
+                    coutAnyExitInfo();
+                    pauze();
 
-                setColor(cText);
+                    clearLines(linia);
+                    hideCursor();
 
-                coutAnyExitInfo();
-                pauze();
-                know_level = 7;
-                access_level = 4;
-                break;
+                    cout << "\n\n";
+                    setCenter(57); cout << "Nim jednak zd¥¾ysz co˜ powiedzie† drzwi zamykaj¥ si©\n\n\n";
+
+                    Sleep(1000);
+
+                    setColor(cText);
+
+                    coutAnyExitInfo();
+                    pauze();
+                    break;
+
+                }
 
             }
 
@@ -874,25 +891,42 @@ void level2(bool* outflag, int* selected) {
                 clear();
                 if (checkTime()) {
                     bool flag = true;
+                    cout<<"\n";
+                    setCenter(30); cout<<"*drzwi powoli si© otwieraj¥*"<<endl;
+                    Sleep(1500);
+                    coutAnyExitInfo();
+                    pauze();
                     mysliwy(&flag);
                 }
                 else {
                     writeFromFile("./resources/2/d1");
                     coutAnyExitInfo();
-                    _getch();
+                    pauze();
                 }
             }
             if (*selected == 1) {
                 clear();
-                writeFromFile("./resources/2/d2");
-                coutAnyExitInfo();
-                _getch();
+                if(access_level >= 4){ //po tym jak udaˆo ci si© zapuka† i wej˜†
+                    bool flag = true;
+                    cout<<"\n";
+                    setCenter(40); cout<<"*drzwi okazuj¥ si© nie by† zamkni©te*\n"<<endl;
+                    setCenter(11); cout<<"*otwierasz*"<<endl;
+                    Sleep(1000);
+                    coutAnyExitInfo();
+                    pauze();
+                    mysliwy(&flag);
+                }
+                else{
+                    writeFromFile("./resources/2/d2");
+                    coutAnyExitInfo();
+                    pauze();
+                }
             }
             if (*selected == 2) {
                 clear();
                 writeFromFile("./resources/2/d3");
                 coutAnyExitInfo();
-                _getch();
+                pauze();
             }
         }
     }
@@ -1080,11 +1114,11 @@ void wyspa(bool* flag) {
                 printToEq("17 zˆotych monet");
                 printToEq("zaszyfrowana karteczka ze skrzynki na wyspie:\n" + napis + "\n");
             }
-            coutAnyExitInfo();
-            pauze();
             if (access_level <= 1) {
                 setAccessLevel(2);
             }
+            coutAnyExitInfo();
+            pauze();
         }
         if (key == 27) {
             *flag = false;
@@ -1123,7 +1157,7 @@ void level3(bool* outflag, int* selected) {
         if (enter == 1) {
             if (*selected == 0) {
                 clear();
-                if (fHelp) {
+                if (fHelp && bridge_access == 0) {
                     coutBridgeHelp(&fHelp);
                 }
                 if (bridge_access == 0) {

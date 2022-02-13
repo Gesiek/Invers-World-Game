@@ -1,0 +1,7 @@
+ACCESS LEVEL:
+0 - start
+1 - po trzech obrazach
+2 - po skrzynce na wyspie
+3 - po zdeszyfrowaniu karteczki z wyspy
+4 - po wejściu do myśliwego (otwiera się portal)
+5 - po otrzymaniu Złotego Szponu

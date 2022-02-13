@@ -1,21 +1,21 @@
-? czyszczenie buffera po Sleep()
+? czyszczenie buffera po Sleep() 
 
-+ progres z pliku: zapis most¢w{
-    ogan¥† getAcces setAccess -> 
-    setAccess przy pokonaniu mostu ->
-    getAcces przy wchodzeniu na jezioo.
-}
+- progres z pliku - DONE
+
++ otwarte drzwi u my˜liwego (after accessed)
 
 + O co tu chodzi? w start menu 
 
+>more ascii images<
 + maszyna obrazek
 + plac obrazek
 + wyspy obrazek
 + drzwi obrazek - my˜liwy numer jeden
 
-+ otwarte drzwi u my˜liwego (after access)
+>funkcje<
 + komentarze do funkcji
++ ogarni©cie/uprz¥tni©cie funkcji, deklaracje-definicje 
 
-+ animacja plus 'most ju¾ zbudowany'
++ animacja zbudowania mostu
 
 + walidacja w maszynie
