@@ -381,7 +381,6 @@ void fillEq(){
         cout<<"*eq* added"<<endl;
 
         eq.close();
-        pause();
     }
     else{
         cout<<"Bˆ¥d otwarcia pliku *eq*"<<endl;
@@ -393,8 +392,7 @@ void fillEq(){
 void clearEq(){
 
     cout << "\n";
-    //setCenter(22); 
-    cout << "Usuwam zawarto˜† z ekwipunku.." << endl;
+    setCenter(32); cout << "Usuwam zawarto˜† z ekwipunku.." << endl;
 
     ofstream eq;
     eq.open("./resources/eq", ios::trunc);
@@ -622,6 +620,7 @@ void changeWindowSize(){
 
 }
 
+/*
 //void clearScreenBuff() {
 void clear_T2() {
 
@@ -673,17 +672,17 @@ void clearScreenSpace4() {
     hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hStdOut == INVALID_HANDLE_VALUE) return;
 
-    /* Get the number of cells in the current buffer */
+    // Get the number of cells in the current buffer 
     if (!GetConsoleScreenBufferInfo(hStdOut, &csbi)) return;
     cellCount = csbi.dwSize.X * csbi.dwSize.Y;
 
-    /* Fill the entire buffer with spaces */
+    // Fill the entire buffer with spaces 
     if (!FillConsoleOutputCharacter(hStdOut, (TCHAR)' ', cellCount, homeCoords, &count)) return;
 
-    /* Fill the entire buffer with the current colors and attributes */
+    // Fill the entire buffer with the current colors and attributes 
     if (!FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, cellCount, homeCoords, &count)) return;
 
-    /* Move the cursor home */
+    // Move the cursor home 
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
@@ -750,3 +749,4 @@ void cls() {
     SetConsoleCursorPosition(getHandle(), consoleScreenBufferInfo.dwCursorPosition);
 }
 
+*/

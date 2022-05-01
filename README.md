@@ -1,9 +1,5 @@
-\*project currently at testing\*
+wersja 1.0.0
 
-- it's runnable at this moment
+ma jeszcze pare pomniejszych błędów, ale wszystko co pierwotnie chciałem zawrzeć jest i działa
 
-- to play just simply run .exe file
-
-- never mind run.bat for now
-
-\*'t' after version number means 'version in testing mode'\*
+dla ułatwienia 'testowania' dodałem w menu opcje "admin_tools"

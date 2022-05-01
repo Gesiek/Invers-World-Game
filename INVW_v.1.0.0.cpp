@@ -17,7 +17,7 @@ int main() {
     bridge_access = getBridgeAccess();
 
     //tytuˆ okna
-    SetConsoleTitleA("Invers World the Game :: koäcowa faza test¢w");
+    SetConsoleTitleA("Invers World - The Game");
 
     fullScreen(); //wˆ¥czenie trybu peˆnoekranowego przy uruchomieniu
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
@@ -37,7 +37,7 @@ int main() {
 
     hideScrollbars(); //ustawienie braku scrollbar'¢w
 
-    loadingScreen(5); //imitacja "ekranu ˆadowania" ;}
+    loadingScreen(8); //imitacja "ekranu ˆadowania" ;}
 
     //flagi wej˜cia - startMenu / menu / poszczeg¢lne lokacje
     bool fmenu = false;
@@ -52,7 +52,7 @@ int main() {
     int enter{}; //czy wcisniety enter
 
     //tablica z opcjami odpowiedniego menu
-    string start[5] = { "Rozpocznij gr©", "Wyczy˜† progres", "Zmieä wieko˜† okna", "*admin_tool*", "Wyjd«" };
+    string start[5] = { "Rozpocznij gr©", "Wyczy˜† progres", "Zmieä wieko˜† okna", "[admin_tools]", "Wyjd«" };
     string menu[5] = { "Dziwny pok¢j", "Drzwi", "Jezioro", "Plac Gˆ¢wny", "???" };
 
     while (fstart) {

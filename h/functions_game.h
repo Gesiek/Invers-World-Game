@@ -20,7 +20,7 @@ int getAccessLvl() {
 
         int fsize{};
         fsize = filesystem::file_size("./resources/current_access");
-        cout<<"size pliku: "<<fsize<<endl;
+        //cout<<"size pliku: "<<fsize<<endl;
 
         if(fsize == 6){
             notcorupted = true;
@@ -29,7 +29,7 @@ int getAccessLvl() {
         if(notcorupted){
 
             acc >> x;
-            cout << "current access: " << x << endl;
+            //cout << "current access: " << x << endl;
             
             acc.close();
 
@@ -69,7 +69,7 @@ int getBridgeAccess() {
         if(notcorupted){
 
             acc >> x;
-            cout << "current b_access: " << x << endl;
+            //cout << "current b_access: " << x << endl;
             
             acc.close();
 
@@ -106,7 +106,7 @@ void setAccessLevel(int acc_lvl) {
         acc << acc_lvl; //wpisanie do pliku
         acc.close();
         
-        cout << "Access level changed" << endl;
+        //cout << "Access level changed" << endl;
     }
     else {
         cout << "Bˆ¥d otwarcia pliku *current_access*" << endl;
@@ -131,7 +131,7 @@ void setBridgeAccess(int b_lvl) {
         acc << b_lvl; //wpisanie do pliku
         acc.close();
 
-        cout << "Bridge access changed" << endl;
+        //cout << "Bridge access changed" << endl;
     }
     else {
         cout << "Bˆ¥d otwarcia pliku *current_access*" << endl;
@@ -162,14 +162,20 @@ void adminTools() {
         if(enter == 1){
             cout << "\n";
             setAccessLevel(5);
+            cout << "Access level changed" << endl;
             cout << "\n";
             setBridgeAccess(3);
+            cout << "BridgeAccess changed" << endl;
             cout << "\n";
+            Sleep(500);
             fillEq();
-            cout << "\n\n\n";
-            setCenter(16); cout << "All Accesses Added" << endl;
             cout << "\n";
-            setCenter(19); cout << "All Equipment Added" << endl;
+            Sleep(700);
+            cout << "All Accesses Added" << endl;
+            cout << "\n";
+            cout << "All Equipment Added" << endl;
+            cout << "\n";
+            pause();
         }
 
     }
@@ -182,13 +188,16 @@ void resetProgres() {
 
     clearEq();
 
+    setCenter(26); cout << "Resetuje poziom dost©pu.."<<endl;
+
     setAccessLevel(0);
 
     setBridgeAccess(0);
 
-    setCenter(17); cout << "Progres usuni©ty";
-
     this_thread::sleep_for(1s);
+
+    cout<<"\n";
+    setCenter(17); cout << "Progres usuni©ty";
 
     coutAnyExitInfo();
     pauze();
@@ -588,9 +597,16 @@ void mysliwy(bool* flag) {
     static int know_level = 1;
     string menuM[] = {"Eee, co?", "1.", "2.", "3.", "4.", "Zapytaj o nagrod©"};
 
-    if(access_level >= 4){
+    if(know_level > 1 && access_level == 4){
+        
+    }
+    else if(access_level == 4){
+        know_level = 2;
+    }
+    else if(access_level >= 5){
         know_level = 7;
     }
+    
 
     /*if (know_level == 7) {
         //przeszedni©te
@@ -807,9 +823,10 @@ void mysliwy(bool* flag) {
                 if(access_level == 5){
                     cout << "\n\n";
                     Sleep(400);
-                    setCenter(36); cout << "- Co prawda mam Alzheimera, ale nie a¾ takiego.\n\n";
-                    Sleep(600);
+                    setCenter(50); cout << "- Co prawda mam Alzheimera, ale nie a¾ takiego.\n\n";
+                    Sleep(500);
                     setCenter(32); cout << "- Ju¾ j¥ przecie¾ otrzymaˆe˜.\n\n";
+                    Sleep(500);
                     
                     coutAnyExitInfo();
                     pauze();
@@ -832,7 +849,7 @@ void mysliwy(bool* flag) {
                     Sleep(1500);
 
                     writeFromFile("./resources/2/przedmiot");
-                    if (access_level <= 3) {
+                    if (access_level <= 4) {
                         setAccessLevel(5);
                     }
                     know_level = 7;
@@ -1085,17 +1102,14 @@ void wyspa(bool* flag) {
     int key{};
     static bool kartka{};
 
+    if(getAccessLvl() >= 2) kartka=true;
+
     while (*flag) {
         clear();
 
         setColor(cMenu);
         writeFromFile("./resources/3/wyspa");
         setColor(cText);
-
-        if (!kartka) {
-            printToEq("br¥zowe futro");
-            printToEq("kilka niebieskich kamyk¢w");
-        }
 
         setCenter(30);
         cout << "Spr¢buj otworzy† skrzynk© <-" << endl;
@@ -1111,6 +1125,8 @@ void wyspa(bool* flag) {
             setColor(cText);
             if (!kartka) {
                 kartka = true;
+                printToEq("br¥zowe futro");
+                printToEq("kilka niebieskich kamyk¢w");
                 printToEq("17 zˆotych monet");
                 printToEq("zaszyfrowana karteczka ze skrzynki na wyspie:\n" + napis + "\n");
             }
@@ -1172,20 +1188,32 @@ void level3(bool* outflag, int* selected) {
                     pauze();
                 }
             }
-            if (*selected == 1) { //tutaj jeszcze to pozmieniac
+            if (*selected == 1) {
                 clear();
-                if (bridgeBuild(7, 8, 250)) {
-                    if (bridge_access == 1) {
-                        bridge_access = 2;
+                if (bridge_access == 1) {
+                    if (bridgeBuild(7, 8, 250)) {
+                        setBridgeAccess(2);
                     }
+                }
+                else{
+                    cout << "\n";
+                    setCenter(15); cout << "Ju¾ zbudowany!\n\n";
+                    coutAnyExitInfo();
+                    pauze();
                 }
             }
             if (*selected == 2) {
                 clear();
-                if (bridgeBuild(5, 10, 200)) {
-                    if (bridge_access == 2) {
-                        bridge_access = 3;
+                if (bridge_access == 2) {
+                    if (bridgeBuild(5, 10, 200)) {
+                        setBridgeAccess(3);
                     }
+                }
+                else{
+                    cout << "\n";
+                    setCenter(15); cout << "Ju¾ zbudowany!\n\n";
+                    coutAnyExitInfo();
+                    pauze();
                 }
             }
             if (*selected == 3) {
@@ -1213,7 +1241,7 @@ void maszyna(bool* mflag) {
         setCenter(36);
         setColor(cMenu);
         cout << "--------aktualnie w ekwipunku---------\n\n";
-        writeFromFile("./resources/eqlist");
+        writeFromFile("./resources/eq");
         setCenter(36);
         cout << "--------------------------------------\n\n\n";
         linia = getCursorPosition().Y;
@@ -1426,8 +1454,8 @@ void final(bool* outflag) {
                 int linia = getCursorPosition().Y;
 
                 if ((!eqCheck("17")) || (!eqCheck("Szpon")) || (!eqCheck("niebieskich")) || (!eqCheck("futro"))) {
-                    setCenter(33); cout << "O kurcze, chyba co˜ przepiˆem.." << endl;
-                    setCenter(22); cout << "Gdzie m¢j ekwipunek?!" << endl;
+                    setCenter(16); cout << "Hmm, nie, nie.." << endl;
+                    setCenter(24); cout << "Potrzebuj© co˜ jeszcze" << endl;
                     flag = false;
                     coutAnyExitInfo();
                     pauze();
